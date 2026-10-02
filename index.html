@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html lang="zh-Hant"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>柒班真是太可愛了</title>
+<style>html,body{margin:0;background:#ffe4ef}#root{height:100vh}</style>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/react/18.2.0/umd/react.production.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.2.0/umd/react-dom.production.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/7.23.5/babel.min.js"></script>
+</head><body><div id="root"></div>
+<script type="text/babel">
+const { useState, useEffect, useRef } = React;
+
+/* ---------- 30 位角色：全部用程式畫出的卡通 SVG（沒有外部圖片） ---------- */
+const S = "#f6d7b8", S2 = "#e8c19a", S3 = "#e0b48a";
+const P = {
+  wg:["王冠筌","#2b2b3a","spike",S,"🎹"], lw:["呂玟璋","#3b2a22","bowl",S,"📜"], lb:["李博滔","#5a4a8a","side",S,"📱"],
+  lc:["林冠辰","#222","short",S2,"🏸"], ly:["林宥豪","#2a2a2a","short",S2,"📏"], sc:["邵晨祐","#6b4a2a","side",S,"🍱"],
+  wy:["翁昱仁","#222","spike",S,"👓"], zj:["莊家豪","#3a2a1a","swoop",S,"🎸"], lx:["陳立軒","#4a3a2a","bowl",S,""],
+  cy:["陳言嘉","#2a2a2a","short",S,"⚡"], ch:["陳弘宇","#6a3a2a","side",S2,"🎧"], cb:["陳柏睿","#c9a227","swoop",S,"🏀"],
+  hy:["黃元銘","#222","spike",S3,"🏐"], hl:["黃立秦","#1f2a44","short",S,"🥁"], hx:["黃昱翔","#8a5a1a","bowl",S,"🌽"],
+  zy:["詹詠喬","#3a3a3a","side",S,""], lz:["賴子嵩","#2a2a2a","spike",S3,"📣"], yz:["顏子恆","#4a2a2a","short",S,""],
+  cs:["陳紹宇","#1a1a1a","swoop",S,"♟️"],
+  ym:["玉梅梅老師","#3a2a2a","bun",S,"📐","#c0517a"], ws:["翁崧筠老師","#333","side",S,"🏀","#556"], hg:["火哥","#333","bald",S2,"🔬","#fff"],
+  sj:["施金農老師","#222","short",S,"🎼","#334"], wm:["吳明霞老師","#2a2a3a","long",S,"∫","#6a4c93"], zt:["曾玉亨老師","#4a3a2a","long",S,"⚗️","#2a9d8f"],
+  hz:["胡志鋒老師","#222","spike",S3,"🏃","#d62828"], pr:["林裕豐校長","#555","bald",S,"🥝","#2d6a4f"], ab:["明偉便當阿伯","#777","cap",S3,"🍱","#e9c46a"],
+  jg:["教官","#222","cap",S2,"📢","#4b5320"], bd:["隔壁班同學","#5a3a2a","short",S,"👀"], mz:["路人甲","#2a3a4a","side",S,""],
+};
+const TEACH = new Set(["ym","ws","hg","sj","wm","zt","hz","pr","ab","jg"]);
+
+function Sprite({ id, mood = "n" }) {
+  const [, hair, style, skin, acc, suit] = P[id];
+  const shirt = suit || "#f4d54a", pants = suit ? "#333" : "#8fae4f";
+  const hairBack = style === "long" || style === "bun";
+  return (
+    <svg viewBox="0 0 160 280" style={{ height: "100%", maxHeight: 340, filter: "drop-shadow(0 6px 8px #b0447a44)" }}>
+      {hairBack && <rect x="38" y="52" width="84" height="100" rx="30" fill={hair} />}
+      <rect x="52" y="222" width="22" height="54" rx="7" fill={pants} />
+      <rect x="86" y="222" width="22" height="54" rx="7" fill={pants} />
+      <path d="M38 150 Q80 128 122 150 L128 232 L32 232 Z" fill={shirt} stroke="#0002" />
+      <rect x="22" y="152" width="18" height="62" rx="9" fill={shirt} /><rect x="120" y="152" width="18" height="62" rx="9" fill={shirt} />
+      <rect x="68" y="124" width="24" height="26" fill={skin} />
+      <ellipse cx="42" cy="92" rx="6" ry="9" fill={skin} /><ellipse cx="118" cy="92" rx="6" ry="9" fill={skin} />
+      <ellipse cx="80" cy="88" rx="38" ry="42" fill={skin} />
+      {style === "spike" && <path d="M40 80 L38 40 L52 56 L58 30 L72 50 L84 26 L96 50 L110 30 L112 56 L124 40 L120 80 Q80 52 40 80Z" fill={hair} />}
+      {style === "short" && <path d="M40 84 Q36 38 80 40 Q124 38 120 84 Q110 58 80 58 Q50 58 40 84Z" fill={hair} />}
+      {style === "side" && <path d="M40 86 Q34 36 82 38 Q126 40 120 84 Q108 54 62 62 Q46 66 40 86Z" fill={hair} />}
+      {style === "swoop" && <path d="M38 88 Q30 34 84 36 Q130 40 122 84 Q112 56 90 62 Q60 50 46 80Z" fill={hair} />}
+      {style === "bowl" && <path d="M38 94 Q34 38 80 38 Q126 38 122 94 L116 66 Q80 56 44 66Z" fill={hair} />}
+      {(style === "long" || style === "bun") && <path d="M40 90 Q36 38 80 38 Q124 38 120 90 Q108 58 80 60 Q52 58 40 90Z" fill={hair} />}
+      {style === "bun" && <circle cx="80" cy="30" r="14" fill={hair} />}
+      {style === "cap" && <><path d="M40 70 Q40 36 80 36 Q120 36 120 70Z" fill={suit} /><rect x="38" y="66" width="60" height="9" rx="4" fill={suit} /></>}
+      {style === "bald" && <path d="M46 62 Q80 40 114 62 Q110 52 80 50 Q50 52 46 62Z" fill={hair} opacity=".35" />}
+      {mood !== "h" && <><ellipse cx="62" cy="96" rx="9" ry="10" fill="#fff" stroke="#3a2a1a33" /><ellipse cx="98" cy="96" rx="9" ry="10" fill="#fff" stroke="#3a2a1a33" /><circle cx="63" cy="98" r="5.5" fill="#2a2a3a" /><circle cx="99" cy="98" r="5.5" fill="#2a2a3a" /><circle cx="65" cy="95" r="2" fill="#fff" /><circle cx="101" cy="95" r="2" fill="#fff" /></>}
+      {mood === "h" && <path d="M52 99 Q62 87 72 99 M88 99 Q98 87 108 99" stroke="#3a2a1a" strokeWidth="3.5" fill="none" strokeLinecap="round" />}
+      <path d={mood === "a" ? "M50 80 L72 88 M110 80 L88 88" : "M52 82 Q62 78 72 82 M88 82 Q98 78 108 82"} stroke="#3a2a1a" strokeWidth="3" fill="none" strokeLinecap="round" />
+      <ellipse cx="52" cy="112" rx="8" ry="5" fill="#ff8aa855" /><ellipse cx="108" cy="112" rx="8" ry="5" fill="#ff8aa855" />
+      <path d={mood === "h" ? "M66 116 Q80 132 94 116Z" : mood === "a" ? "M68 124 Q80 114 92 124" : mood === "s" ? "M80 118 m-6 0 a6 7 0 1 0 12 0 a6 7 0 1 0 -12 0" : "M68 120 Q80 128 92 120"} fill={mood === "h" || mood === "s" ? "#c0394f" : "none"} stroke="#7a2a2a" strokeWidth="2.5" strokeLinecap="round" />
+      {acc === "👓" && <g fill="none" stroke="#333" strokeWidth="3"><circle cx="62" cy="96" r="13" /><circle cx="98" cy="96" r="13" /><path d="M75 96 H85" /></g>}
+      {acc === "🎧" && <g><path d="M38 90 Q80 6 122 90" stroke="#333" strokeWidth="6" fill="none" /><rect x="30" y="84" width="14" height="26" rx="6" fill="#e63946" /><rect x="116" y="84" width="14" height="26" rx="6" fill="#e63946" /></g>}
+      {!["👓", "🎧", ""].includes(acc) && <text x="80" y="198" fontSize="38" textAnchor="middle">{acc}</text>}
+    </svg>
+  );
+}
+
+const win = (x, y, w = 90, h = 110) => <g><rect x={x} y={y} width={w} height={h} rx="6" fill="#d8f0ff" stroke="#fff" strokeWidth="6" /><path d={`M${x + w / 2} ${y} V${y + h} M${x} ${y + h / 2} H${x + w}`} stroke="#fff" strokeWidth="4" /><circle cx={x + 20} cy={y + 24} r="8" fill="#fff" opacity=".7" /></g>;
+function Bg({ k }) {
+  const petals = [[60, 80], [200, 40], [420, 90], [640, 60], [700, 180], [120, 220], [560, 240]].map(([x, y], i) => <ellipse key={i} cx={x} cy={y} rx="7" ry="4" fill="#fff" opacity=".55" transform={`rotate(${i * 30} ${x} ${y})`} />);
+  const body = {
+    room: <><rect width="760" height="700" fill="#ffe6f0" /><rect y="470" width="760" height="230" fill="#e9b4c8" />{win(40, 60)}{win(600, 60)}<rect x="190" y="70" width="380" height="190" rx="8" fill="#5f7f6c" stroke="#c99" strokeWidth="10" /><text x="380" y="150" fontSize="38" textAnchor="middle" fill="#fff" opacity=".85">高三 307 班</text><text x="380" y="205" fontSize="22" textAnchor="middle" fill="#fff" opacity=".6">奇異果子民，起來！</text>{[0, 1, 2].map((i) => <rect key={i} x={70 + i * 230} y="480" width="170" height="70" rx="8" fill="#d99ab4" />)}</>,
+    hall: <><rect width="760" height="700" fill="#ffe3ef" /><rect y="450" width="760" height="250" fill="#f3c2d6" />{[0, 1, 2].map((i) => <g key={i}>{win(300 + i * 150, 90, 110, 150)}</g>)}{[0, 1, 2, 3].map((i) => <rect key={i} x={20 + i * 70} y="150" width="60" height="300" rx="6" fill="#ee9fbd" stroke="#fff" strokeWidth="4" />)}{[0, 1, 2, 3, 4, 5].map((i) => <path key={i} d={`M${i * 140} 700 L${380 + (i - 2.5) * 20} 450`} stroke="#fff" opacity=".5" strokeWidth="3" />)}</>,
+    coop: <><rect width="760" height="700" fill="#fff0e4" /><rect y="460" width="760" height="240" fill="#f7c4d4" />{[0, 1, 2, 3, 4, 5, 6, 7].map((i) => <rect key={i} x={i * 100 - 20} y="60" width="100" height="70" fill={i % 2 ? "#fff" : "#ff8fb8"} />)}<text x="380" y="190" fontSize="46" textAnchor="middle" fill="#a3225c">合作社</text><rect x="70" y="250" width="620" height="200" rx="10" fill="#fff" opacity=".85" /><text x="380" y="320" fontSize="26" textAnchor="middle" fill="#a3225c">謝師父便當　八方雲集辣味鍋貼　小米便當</text><text x="380" y="380" fontSize="22" textAnchor="middle" fill="#d0647a">第三節下課只能用卡</text></>,
+    music: <><rect width="760" height="700" fill="#f6dcff" /><rect y="480" width="760" height="220" fill="#d8aee4" />{[0, 1, 2, 3, 4].map((i) => <path key={i} d={`M40 ${110 + i * 16} H720`} stroke="#fff" strokeWidth="3" opacity=".7" />)}<text x="140" y="150" fontSize="46" fill="#fff">♪</text><text x="400" y="130" fontSize="40" fill="#fff">♫</text><rect x="470" y="330" width="250" height="160" rx="10" fill="#3b2a4a" />{[0, 1, 2, 3, 4, 5, 6].map((i) => <rect key={i} x={478 + i * 34} y="440" width="30" height="50" fill="#fff" />)}<path d="M0 0 Q80 200 20 460 L0 460Z M760 0 Q680 200 740 460 L760 460Z" fill="#ff9fc4" opacity=".7" /></>,
+    dusk: <><defs><linearGradient id="dk" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stopColor="#8e6bbf" /><stop offset=".6" stopColor="#ff7e8a" /><stop offset="1" stopColor="#ffd08a" /></linearGradient></defs><rect width="760" height="700" fill="url(#dk)" /><circle cx="560" cy="330" r="90" fill="#fff2c4" opacity=".9" /><path d="M0 560 H140 V440 H260 V520 H360 V400 H520 V500 H640 V460 H760 V700 H0Z" fill="#5a3a6a" />{[0, 1, 2, 3, 4, 5].map((i) => <rect key={i} x={170 + i * 90} y="450" width="26" height="30" fill="#ffe28a" opacity=".85" />)}</>,
+    gate: <><rect width="760" height="700" fill="#ffd9ec" /><circle cx="130" cy="110" r="60" fill="#fff6c8" /><rect y="520" width="760" height="180" fill="#f2b8d0" /><rect x="120" y="260" width="40" height="270" fill="#fff" /><rect x="600" y="260" width="40" height="270" fill="#fff" /><rect x="100" y="230" width="560" height="60" rx="10" fill="#7fa04a" /><text x="380" y="272" fontSize="34" textAnchor="middle" fill="#fff8c4">武陵高中・奇異果節</text>{[0, 1, 2].map((i) => <circle key={i} cx={60 + i * 320} cy="470" r="70" fill="#ff9fc4" opacity=".6" />)}</>,
+    lab: <><rect width="760" height="700" fill="#dff6f2" /><rect y="460" width="760" height="240" fill="#bfe3dc" />{win(50, 70)}<rect x="360" y="80" width="340" height="170" rx="8" fill="#fff" stroke="#9cc" strokeWidth="6" /><text x="530" y="160" fontSize="30" textAnchor="middle" fill="#2a9d8f">Mitochondria</text><text x="530" y="205" fontSize="20" textAnchor="middle" fill="#2a9d8f" opacity=".7">諾貝爾獎？有吧。</text><rect y="400" width="760" height="70" fill="#8cc9bf" />{[0, 1, 2, 3].map((i) => <path key={i} d={`M${120 + i * 160} 400 l-18 -60 h36z`} fill="#ff9fc4" opacity=".8" />)}</>,
+  }[k] || null;
+  return <svg viewBox="0 0 760 700" preserveAspectRatio="xMidYMid slice" style={{ position: "absolute", inset: 0, width: "100%", height: "100%" }}>{body}{petals}</svg>;
+}
+
+const ITEMS = {
+  chocolate: ["🍫", "巧克力", "林冠辰最愛的東西。可以吃（飢餓 +10），也可以送人。", { h: 10 }],
+  羽球: ["🏸", "羽球", "在王冠筌座位旁撿到的。林冠辰應該會想要。"],
+  筆: ["🖊️", "沒水的筆", "寫不出字，但很有重量感。"],
+  奧利多水: ["🥤", "奧利多水", "火哥的對賭獎品。精力 +15。", { e: 15 }],
+  鍋貼: ["🥟", "辣味鍋貼", "八方雲集的。飢餓 +25。", { h: 25 }],
+  便當: ["🍱", "明偉便當", "阿伯加菜的。飢餓 +40。", { h: 40 }],
+  奇異果: ["🥝", "奇異果", "武陵的象徵。飢餓 +10、精力 +5。", { h: 10, e: 5 }],
+};
+const info = (n) => ITEMS[n] || ["🎁", n, "不知道是什麼，但看起來有用。"];
+const SLOTS = 20;
+
+/* ---------- 遊戲資料：沒有預設劇情，全部由 AI 擔任 GM ---------- */
+const TT = {
+  1: ["體育（胡志鋒）", "補強-生物（火哥）", "選修物理-波動光及（沈玉梅）", "選修物理-波動光及（沈玉梅）", "數學甲（吳明霞）", "數學甲（吳明霞）", "英語文（翁崧筠）", "英文輔（翁崧筠）"],
+  2: ["國語文（溫睿瀅）", "國語文（溫睿瀅）", "藝術生活（葉庭甫）", "全民國防教育（楊子均）", "補強-生物（火哥）", "數學甲（吳明霞）", "選修化學（曾玉亨）", "化學輔（曾玉亨）"],
+  3: ["高三彈性學習一（溫睿瀅）", "國語文（溫睿瀅）", "英文作文（翁崧筠）", "體育（胡志鋒）", "多元選修", "多元選修", "音樂（施金農）", "數學輔（吳明霞）"],
+  4: ["選修生物-細胞與遺傳（火哥）", "音樂（施金農）", "選修化學（曾玉亨）", "選修化學（曾玉亨）", "高三彈性學習三（吳明霞）", "英文作文（翁崧筠）", "國語文（溫睿瀅）", "國文輔（溫睿瀅）"],
+  5: ["數學甲（吳明霞）", "選修生物-細胞與遺傳（火哥）", "團體活動時間（沈玉梅）", "團體活動時間（沈玉梅）", "高三彈性學習二（翁崧筠）", "英語文（翁崧筠）", "選修物理-電磁現象一（沈玉梅）", "物理輔（沈玉梅）"],
+};
+const WD = ["日", "一", "二", "三", "四", "五", "六"];
+const dateOf = (day) => { const d = new Date(2026, 7, 31); let n = day - 1; while (n > 0) { d.setDate(d.getDate() + 1); if (d.getDay() % 6 !== 0) n--; } return d; };
+const slotsOf = (day) => {
+  const w = dateOf(day).getDay(), t = TT[w].slice();
+  if (day === 1) { t[0] = "團體活動時間（沈玉梅講話：高三了不要再滑手機）"; t[1] = "團體活動時間（沈玉梅）"; t[2] = "開學典禮（校長講話）"; }
+  if (day <= 5 && w === 3) { t[4] = "選課時間（沒有多元選修，自習與選課）"; t[5] = "選課時間（自習）"; }
+  const L = [["第1節", t[0]], ["第1節下課", ""], ["第2節", t[1]], ["第2節下課（打掃時間）", ""], ["第3節", t[2]], ["第3節下課（合作社只能用卡）", ""], ["第4節", t[3]], ["午餐・午休（第4節下課可用現金買便當）", ""], ["第5節", t[4]], ["第6節", t[5]], ["第7節", t[6]]];
+  if (day >= 6) L.push(["第8節（輔導課）", t[7]]);
+  L.push(["放學後", ""]);
+  return L;
+};
+const TRAIT = "王冠筌(愛聊天不整理，口頭禪Fxxk you bxxxh只單獨成句，輕度厭女傾向是缺點)、呂玟璋(小正太，國文好，常拿扇子滑手機)、李博滔(音遊社長，負能量，只愛古明地戀)、林冠辰(羽球隊長，巧克力能打動他)、林宥豪(數理強，直尺劍術)、邵晨祐(有錢，訂午餐)、翁昱仁(生物奧賽，幹話，LeBron是唯一GOAT，愛明偉便當)、莊家豪(吉他帥潮，英文強，常說「啊我就沒有……」「你明明就有……」，生物小老師)、陳立軒(蠢蠢慢半拍好相處)、陳言嘉(普通同學，覺得回答蠢會說靠杯)、陳弘宇(音樂)、陳柏睿小多(最有錢但頂多買一千顆籃球，軍火禁止)、黃元銘(排球最強)、黃立秦(最聰明鼓手，不輕易破防)、黃昱翔玉米(偷偷喜歡主角，常早上不到)、詹詠喬、賴子嵩(體育股長，離譜才說何味道)、顏子恆(不爽說你媽)、陳紹宇(很少到校，句尾拉長，圍棋)；老師：沈玉梅(導師，U mei mei，口頭禪Timing！討厭中午不午睡)、翁崧筠(英文，厭世)、火哥(生物，只在生物專有名詞說英文，上課必說「小老師，上課了嗎」，莊家豪答「上課了」，會用奧利多水對賭成績)、施金農(音樂課幾乎不上音樂，只講discipline與大家不準時)、吳明霞(女，數學無名俠，在她課上搗蛋極危險)、曾玉亨(女，化學，會抓玩手機)、胡志鋒(體育)、校長林裕豐(和善，會抓外食)、明偉便當阿伯(合作社外攤位)、教官";
+const SYS = `你是《柒班真是太可愛了》的 GM。場景：武陵高中高三 307 班（柒班），導師沈玉梅，全班學生都是男生。基調：日常、溫暖、笑點密集的校園喜劇，描寫偏白描。全部劇情由你即興產生，沒有預設劇本，要依玩家行動自然推進。角色 id 對照：${Object.keys(P).filter((k) => !["me"].includes(k)).map((k) => k + "=" + P[k][0]).join("、")}。角色設定：${TRAIT}。教室後面有三張躺椅，後牆有個通往隔壁班的洞（偷看會有機率被怒視）。王冠筌不整理，教室可撿到雜物（偶爾有黃元銘發臭的便當，碰到會中毒）。規則：1) 不寫暴力、血腥、18+；不親密冒犯；不熟就做親密舉動要扣好感。2) 口頭禪不要濫用，平均每 3～5 句才一次，且只有本人會說。3) 好感度單次提升：普通成功最多 +2，大成功（骰 20）最多 +5，失敗或冒犯可以扣分。4) 玩家若把故事帶到天馬行空或離譜方向，先用一句話問玩家要不要拉回，別擅自強制拉回。5) 嚴格依照給你的目前時段、課表與出席資訊來寫；上課時要符合老師個性；下課可以聊天、買東西、撿東西、打球。6) 玩家的行動可能附帶骰子結果（d20，DC12）：有風險的行動必須尊重骰子，成功就有效，失敗就搞笑失敗；無風險的行動可以忽略骰子。7) 每次只推進一個小段落，不要替玩家做決定。8) 當這個時段的事情告一段落，advance 設 true 讓時間往下一時段前進。只輸出 JSON，不要任何其他文字，格式：{"bg":"room|hall|coop|music|dusk|gate|lab","lines":[["角色id或空字串","台詞或旁白","h|a|s|n"]],"choices":["選項1","選項2","選項3"],"aff":{"角色id":數字},"h":0,"e":0,"m":0,"item":"","advance":false}。lines 3 到 6 句，choices 剛好 3 個且後果不同，h/e 為飢餓與精力變化，m 為記過增加，item 為獲得的道具名稱（可為空）。`;
+
+const cl = (n) => Math.max(0, Math.min(100, n));
+const fresh = () => ({ on: false, day: 1, slot: 0, frames: [], fi: 0, choices: [], aff: {}, aff0: {}, h: 80, e: 80, m: 0, inv: [], roll: null, bg: "gate", mem: [], tid: 0, pendingEnd: false, settle: false, summary: "", loading: false, last: null, absent: false, inv0: 0 });
+
+function QibanGalGame() {
+  const [name, setName] = useState("柒班新生");
+  const [g, setG] = useState("m");
+  const [st, setSt] = useState(fresh());
+  const [inp, setInp] = useState("");
+  const [prov, setProv] = useState("gemini"), [key, setKey] = useState(""), [model, setModel] = useState("gemini-2.5-flash"), [cfg, setCfg] = useState(false), [test, setTest] = useState("");
+  const [bag, setBag] = useState(false), [sel, setSel] = useState(0), [panel, setPanel] = useState(false), [fs, setFs] = useState(false);
+  const [txt, setTxt] = useState(""), done = useRef(false);
+  P.me = [name || "你", "#3a2a2a", g === "f" ? "long" : "short", S, ""];
+  const aff = (k) => st.aff[k] ?? 10;
+  const stacks = [];
+  st.inv.forEach((n) => { const e = stacks.find((x) => x.n === n); e ? e.c++ : stacks.push({ n, c: 1 }); });
+  const slots = slotsOf(st.day), cur = slots[Math.min(st.slot, slots.length - 1)], dt = dateOf(st.day);
+  const f = st.frames[st.fi] || ["", ""];
+  const atEnd = st.fi >= st.frames.length - 1;
+  const who = f[0], mood = f[2] || "n", full = f[1] || "";
+  const showChoices = st.on && !st.loading && !st.settle && atEnd && done.current && !st.pendingEnd && st.choices.length > 0;
+
+  useEffect(() => { const h = () => setFs(!!document.fullscreenElement); document.addEventListener("fullscreenchange", h); return () => document.removeEventListener("fullscreenchange", h); }, []);
+  const toggleFs = () => { try { document.fullscreenElement ? document.exitFullscreen() : document.documentElement.requestFullscreen(); } catch (e) {} };
+  useEffect(() => {
+    done.current = false; setTxt("");
+    let i = 0; const t = setInterval(() => { i++; setTxt(full.slice(0, i)); if (i >= full.length) { done.current = true; clearInterval(t); } }, 22);
+    return () => clearInterval(t);
+  }, [full, st.fi, st.tid]);
+
+  const callLLM = async (sys, usr) => {
+    if (prov === "gemini") {
+      if (!key.trim()) throw new Error("請先到 ⚙ 設定填入 Gemini API Key");
+      const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/${encodeURIComponent(model)}:generateContent?key=${encodeURIComponent(key.trim())}`, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ systemInstruction: { parts: [{ text: sys }] }, contents: [{ role: "user", parts: [{ text: usr }] }], generationConfig: { responseMimeType: "application/json" } }) });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error?.message || res.status);
+      return (data.candidates?.[0]?.content?.parts || []).map((x) => x.text || "").join("");
+    }
+    const res = await fetch("https://api.anthropic.com/v1/messages", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ model: "claude-sonnet-4-6", max_tokens: 1200, system: sys, messages: [{ role: "user", content: usr }] }) });
+    const data = await res.json();
+    if (!res.ok) throw new Error(data.error?.message || res.status);
+    return (data.content || []).map((c) => c.text || "").join("");
+  };
+  const parse = (o) => JSON.parse(o.replace(/```json|```/g, "").trim());
+  const testConn = async () => {
+    setTest("連線測試中…"); const t0 = Date.now();
+    try { const j = parse(await callLLM('只輸出 JSON：{"ok":true,"msg":"柒班收到"}', "連線測試")); setTest(`✅ 連線成功（${Date.now() - t0} ms）：${j.msg || "OK"}`); }
+    catch (e) { setTest("❌ 連線失敗：" + (e.message || "未知錯誤") + "（在 claude.ai 預覽測 Gemini 可能被擋，請改在自己的網頁或本機執行）"); }
+  };
+
+  const turn = async (act, opts = {}) => {
+    if (!opts.snap && st.loading) return;
+    const s0 = opts.snap || st;
+    const sl0 = slotsOf(s0.day), cu = sl0[Math.min(s0.slot, sl0.length - 1)], dd = dateOf(s0.day);
+    const d20 = 1 + Math.floor(Math.random() * 20), roll = opts.start ? null : { d20, dc: 12, ok: d20 === 20 || (d20 !== 1 && d20 >= 12), big: d20 === 20 };
+    const absentHx = opts.absent ?? s0.absent, csHere = Math.random() < 0.08;
+    setSt((s) => ({ ...s, loading: true, last: { act, opts }, absent: absentHx }));
+    const ctx = { 日期: `${dd.getMonth() + 1}/${dd.getDate()}（${WD[dd.getDay()]}）第${s0.day}天`, 目前時段: cu[0], 該節課程: cu[1] || "（下課或非上課時段）", 主角: `${name}（${g === "f" ? "女" : g === "x" ? "性別不指定" : "男"}）`, 飢餓: s0.h, 精力: s0.e, 記過: s0.m, 道具: s0.inv, 友好度: s0.aff, 出席: { 黃昱翔玉米: absentHx && s0.slot < 7 ? "上午缺席，不在教室" : "在教室", 陳紹宇: csHere ? "今天剛好有來，可以出場" : "沒來，只能被提起" }, 最近劇情: s0.mem.slice(-8) };
+    const usr = `${opts.start ? "這是這一天的開場，請自己寫一個符合時段與課表的開場場景。" : `玩家行動：「${act}」。骰子：d20=${roll.d20}，DC12，${roll.big ? "大成功" : roll.ok ? "成功" : "失敗"}。`}\n狀態：${JSON.stringify(ctx)}`;
+    try {
+      const j = parse(await callLLM(SYS, usr));
+      const lines = (j.lines || []).slice(0, 7).map(([w, t, m]) => [P[w] && w !== "me" ? w : "", String(t), m || "n"]);
+      setSt((s) => {
+        const A = { ...s.aff };
+        Object.entries(j.aff || {}).forEach(([k, v]) => { if (!P[k]) return; const n = Number(v) || 0; A[k] = cl((A[k] ?? 10) + (n > 0 ? Math.min(n, roll?.big ? 5 : 2) : Math.max(n, -10))); });
+        const adv = !!j.advance, ns = adv ? s.slot + 1 : s.slot;
+        return { ...s, loading: false, aff: A, h: cl(s.h + (Number(j.h) || 0) - (adv ? 6 : 0)), e: cl(s.e + (Number(j.e) || 0) - (adv ? 5 : 0)), m: s.m + (Number(j.m) || 0), inv: j.item ? [...s.inv, String(j.item)] : s.inv, roll, bg: ["room", "hall", "coop", "music", "dusk", "gate", "lab"].includes(j.bg) ? j.bg : s.bg, frames: lines.length ? lines : [["", "…"]], fi: 0, choices: (j.choices || []).slice(0, 3).map(String), slot: ns, pendingEnd: ns >= slotsOf(s.day).length, mem: [...s.mem, ...lines.map(([w, t]) => (w ? P[w][0] + "：" : "") + t)].slice(-16), tid: s.tid + 1 };
+      });
+    } catch (e) {
+      setSt((s) => ({ ...s, loading: false, roll: null, frames: [["", "AI 暫時沒有回應：" + (e.message || "未知錯誤") + "。可以按重試，或到 ⚙ 檢查設定。"]], fi: 0, choices: ["重試"], tid: s.tid + 1 }));
+    }
+  };
+
+  const begin = () => { const absent = Math.random() < 0.7, snap = { ...fresh(), on: true, absent }; setSt(snap); turn("", { start: true, absent, snap }); };
+  const click = () => {
+    if (!st.on || st.loading || st.settle) return;
+    if (!done.current) { done.current = true; setTxt(full); return; }
+    if (!atEnd) setSt((s) => ({ ...s, fi: s.fi + 1 }));
+    else if (st.pendingEnd) {
+      setSt((s) => ({ ...s, settle: true, summary: "" }));
+      callLLM('只輸出 JSON：{"summary":"用兩三句話總結今天發生的事，語氣溫暖搞笑"}', "今天的劇情：" + st.mem.slice(-12).join(" / ")).then((o) => setSt((s) => ({ ...s, summary: parse(o).summary || "" }))).catch(() => setSt((s) => ({ ...s, summary: "今天也是平凡又吵鬧的一天。" })));
+    }
+  };
+  const pickChoice = (c) => (c === "重試" && st.last ? turn(st.last.act, st.last.opts) : turn(c));
+  const send = () => { const a = inp.trim(); if (a && !st.loading) { setInp(""); turn(a); } };
+  const nextDay = () => {
+    const absent = Math.random() < 0.7;
+    const snap = { ...st, day: st.day + 1, slot: 0, aff0: { ...st.aff }, inv0: st.inv.length, h: Math.max(st.h, 60), e: Math.max(st.e, 70), frames: [], fi: 0, choices: [], settle: false, pendingEnd: false, roll: null, bg: "gate", absent, loading: false };
+    setSt(snap);
+    turn("", { start: true, absent, snap });
+  };
+  const useItem = (n) => setSt((s) => { const i = s.inv.indexOf(n); if (i < 0) return s; const eff = info(n)[3] || {}; return { ...s, inv: s.inv.filter((_, k) => k !== i), h: Math.min(100, s.h + (eff.h || 0)), e: Math.min(100, s.e + (eff.e || 0)) }; });
+  const dropItem = (n) => setSt((s) => { const i = s.inv.indexOf(n); return i < 0 ? s : { ...s, inv: s.inv.filter((_, k) => k !== i) }; });
+
+  const X = ({ onClick }) => <button aria-label="關閉" onClick={onClick} style={{ position: "absolute", top: 10, right: 10, width: 42, height: 42, borderRadius: 21, border: "2px solid #ec5f92", background: "#fff", color: "#a3225c", fontSize: 22, fontWeight: 700, cursor: "pointer", zIndex: 12 }}>✕</button>;
+  const sp = who && P[who] ? who : null;
+  const pill = { background: "#fff0f6e6", borderRadius: 10, padding: "4px 10px" };
+  const sm = { padding: "2px 10px", fontSize: 12 };
+  const overlay = { position: "absolute", inset: 0, background: "#fff0f6f8", zIndex: 9, padding: "58px 16px 16px", overflow: "auto" };
+  const fsx = { display: "flex", gap: 8, alignItems: "center" };
+  return (
+    <div style={{ height: "100vh", maxWidth: 760, margin: "0 auto", background: "#ffe4ef", position: "relative", overflow: "hidden", fontFamily: "'Noto Sans TC','PingFang TC','Microsoft JhengHei',sans-serif", color: "#3a2430", userSelect: "none" }} onClick={click}>
+      <Bg k={st.on ? st.bg : "gate"} />
+      <style>{`.btn{background:#fff0f6f0;border:2px solid #ec5f92;border-radius:14px;padding:10px 14px;font-size:15px;cursor:pointer;text-align:left;color:#3a2430}.btn:hover{background:#ffd3e4}.btn:disabled{opacity:.5}@media(prefers-reduced-motion:no-preference){.pop{animation:p .25s}}@keyframes p{from{transform:translateY(8px);opacity:0}}`}</style>
+      {!st.on && (
+        <div style={{ position: "absolute", inset: 0, zIndex: 5, background: "linear-gradient(#ffc2dcdd,#ff8fb8dd)", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", gap: 12, padding: 24 }} onClick={(e) => e.stopPropagation()}>
+          <div style={{ fontSize: 60 }}>🌸🥝</div>
+          <h1 style={{ margin: 0, fontSize: 30, textAlign: "center", color: "#a3225c" }}>柒班真是太可愛了</h1>
+          <div style={{ fontSize: 14 }}>武陵高中 307 班・高三開學日</div>
+          <div style={{ height: 140 }}><Sprite id="me" mood="h" /></div>
+          <input value={name} onChange={(e) => setName(e.target.value)} maxLength={8} style={{ padding: 10, borderRadius: 12, border: "2px solid #a3225c", fontSize: 16, textAlign: "center" }} />
+          <div style={fsx}>{[["m", "男生"], ["f", "女生"], ["x", "不指定"]].map(([k, l]) => <button key={k} className="btn" style={{ background: g === k ? "#e8608f" : undefined, color: g === k ? "#fff" : undefined }} onClick={() => setG(k)}>{l}</button>)}</div>
+          <div style={fsx}><button className="btn" onClick={begin}>開始這一天</button><button className="btn" onClick={() => setCfg(true)}>⚙ AI 設定</button></div>
+          <div style={{ fontSize: 12, opacity: 0.8, textAlign: "center", lineHeight: 1.6 }}>沒有預設劇情，全部由 AI 當 GM 即興演出。<br />請先在 ⚙ 設定 AI 並測試連線。所有角色皆為虛構。</div>
+        </div>
+      )}
+      {st.on && (<>
+        <div style={{ position: "absolute", top: 8, left: 8, right: 8, display: "flex", justifyContent: "space-between", flexWrap: "wrap", gap: 6, fontSize: 12, zIndex: 3 }} onClick={(e) => e.stopPropagation()}>
+          <span style={pill}>{dt.getMonth() + 1}/{dt.getDate()}（{WD[dt.getDay()]}）{cur[0]}{cur[1] ? "・" + cur[1] : ""}</span>
+          <span style={{ display: "flex", gap: 4 }}><button className="btn" style={sm} onClick={() => setBag(true)}>🎒</button><button className="btn" style={sm} onClick={() => setPanel(true)}>💗</button><button className="btn" style={sm} onClick={() => setCfg(true)}>⚙</button><button className="btn" style={sm} onClick={toggleFs}>{fs ? "🗗" : "⛶"}</button></span>
+          <span style={pill}>飢餓 {st.h}｜精力 {st.e}｜小過 {st.m}</span>
+        </div>
+        <div style={{ position: "absolute", top: 70, bottom: 215, left: 0, right: 0, display: "flex", justifyContent: "center", alignItems: "flex-end" }}>
+          {sp && <div key={sp + st.fi + st.tid} className="pop" style={{ height: "100%" }}><Sprite id={sp} mood={mood} /></div>}
+        </div>
+        {st.roll && <div style={{ position: "absolute", top: 46, left: "50%", transform: "translateX(-50%)", background: st.roll.ok ? "#c8f1b0" : "#ffc4c4", border: "2px solid #0003", borderRadius: 12, padding: "4px 12px", fontSize: 13, zIndex: 3 }}>🎲 {st.roll.d20}（DC {st.roll.dc}）{st.roll.big ? "大成功！" : st.roll.ok ? "成功" : "失敗"}</div>}
+        <div style={{ position: "absolute", left: 10, right: 10, bottom: 10, minHeight: 195, maxHeight: "52%", overflow: "auto", background: "#fff0f6f2", border: "3px solid #ec5f92", borderRadius: 18, padding: "20px 16px 12px" }}>
+          {who && <div style={{ position: "absolute", top: -16, left: 16, background: TEACH.has(who) ? "#b0447a" : "#ec5f92", color: "#fff", borderRadius: 12, padding: "3px 14px", fontWeight: 700 }}>{P[who]?.[0] ?? who}</div>}
+          {st.loading ? <div style={{ fontSize: 16, opacity: 0.7 }}>GM 正在想接下來發生什麼…🌸</div> : <div style={{ fontSize: 16, lineHeight: 1.75, minHeight: 56 }}>{who ? "「" : ""}{txt}{who && done.current ? "」" : ""}</div>}
+          {!st.loading && !showChoices && !st.settle && <div style={{ textAlign: "right", fontSize: 12, opacity: 0.5 }}>點一下繼續 ▼</div>}
+          {showChoices && <div style={{ display: "grid", gap: 7, marginTop: 6 }} onClick={(e) => e.stopPropagation()}>
+            {st.choices.map((c, i) => <button key={i} className="btn pop" onClick={() => pickChoice(c)}>{c}</button>)}
+            <div style={{ display: "flex", gap: 6 }}><input value={inp} onChange={(e) => setInp(e.target.value)} onKeyDown={(e) => { if (e.key === "Enter" && !e.nativeEvent.isComposing) send(); }} placeholder="自己決定要做什麼…" style={{ flex: 1, padding: 9, borderRadius: 12, border: "2px solid #ec5f92", fontSize: 14, background: "#fff", color: "#3a2430" }} /><button className="btn" onClick={send}>送出</button></div></div>}
+        </div>
+      </>)}
+      {st.settle && (
+        <div style={{ ...overlay, zIndex: 10, padding: 18, background: "linear-gradient(#ffe4efee,#ffc2dcee)" }} onClick={(e) => e.stopPropagation()}>
+          <h2 style={{ margin: "10px 0 2px", color: "#a3225c", textAlign: "center" }}>🌸 第 {st.day} 天結算</h2>
+          <div style={{ textAlign: "center", fontSize: 13, marginBottom: 10 }}>{dt.getMonth() + 1}/{dt.getDate()}（{WD[dt.getDay()]}）放學了</div>
+          <div style={{ background: "#fff", border: "3px solid #ec5f92", borderRadius: 14, padding: 12, fontSize: 14, lineHeight: 1.7, marginBottom: 10 }}>{st.summary || "整理今天的回憶中…"}</div>
+          <div style={{ background: "#fff", border: "3px solid #ec5f92", borderRadius: 14, padding: 12, fontSize: 14 }}>
+            <div>🍽️ 飢餓 {st.h}　⚡ 精力 {st.e}　📝 小過 {st.m}</div>
+            <div style={{ margin: "6px 0" }}>🎒 今天新增道具：{Math.max(0, st.inv.length - st.inv0)} 個</div>
+            <div style={{ fontWeight: 700, color: "#a3225c", margin: "8px 0 4px" }}>好感度變化</div>
+            {Object.keys(st.aff).filter((k) => (st.aff[k] ?? 10) !== (st.aff0[k] ?? 10)).map((k) => { const d = st.aff[k] - (st.aff0[k] ?? 10); return <div key={k} style={{ display: "flex", justifyContent: "space-between" }}><span>{P[k]?.[0]}</span><span style={{ color: d > 0 ? "#2a9d4f" : "#d62828" }}>{d > 0 ? "▲ +" : "▼ "}{d}（{st.aff[k]}/100）</span></div>; })}
+            {Object.keys(st.aff).filter((k) => (st.aff[k] ?? 10) !== (st.aff0[k] ?? 10)).length === 0 && <div style={{ opacity: 0.6 }}>今天沒有變化</div>}
+          </div>
+          <button className="btn" style={{ marginTop: 14, width: "100%", textAlign: "center", fontWeight: 700 }} onClick={nextDay}>進入第 {st.day + 1} 天 ▶</button>
+        </div>
+      )}
+      {bag && (
+        <div style={overlay} onClick={(e) => e.stopPropagation()}>
+          <X onClick={() => setBag(false)} />
+          <h2 style={{ margin: "0 0 10px", color: "#a3225c" }}>🎒 背包　<span style={{ fontSize: 13, fontWeight: 400 }}>{stacks.length}/{SLOTS} 格</span></h2>
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(5,1fr)", gap: 6, background: "#f7cfe0", padding: 8, borderRadius: 14, border: "3px solid #ec5f92" }}>
+            {Array.from({ length: SLOTS }).map((_, i) => { const it = stacks[i]; const on = sel === i; return (
+              <div key={i} onClick={() => setSel(i)} style={{ aspectRatio: "1", background: it ? "#fff" : "#ffffff88", border: on ? "3px solid #a3225c" : "2px solid #ec5f9288", borderRadius: 10, display: "flex", alignItems: "center", justifyContent: "center", fontSize: 30, position: "relative", cursor: "pointer", boxShadow: on ? "0 0 10px #ec5f92" : "none" }}>
+                {it && info(it.n)[0]}{it && it.c > 1 && <span style={{ position: "absolute", right: 4, bottom: 1, fontSize: 12, fontWeight: 700, color: "#a3225c" }}>x{it.c}</span>}
+              </div>); })}
+          </div>
+          <div style={{ marginTop: 10, minHeight: 92, background: "#fff", border: "3px solid #ec5f92", borderRadius: 14, padding: 12 }}>
+            {stacks[sel] ? (<>
+              <div style={{ fontSize: 18, fontWeight: 700, color: "#a3225c" }}>{info(stacks[sel].n)[0]} {info(stacks[sel].n)[1]}</div>
+              <div style={{ fontSize: 14, margin: "6px 0 8px", lineHeight: 1.6 }}>{info(stacks[sel].n)[2]}</div>
+              <div style={fsx}>{info(stacks[sel].n)[3] && <button className="btn" onClick={() => useItem(stacks[sel].n)}>使用</button>}<button className="btn" onClick={() => dropItem(stacks[sel].n)}>丟棄</button></div>
+            </>) : <div style={{ opacity: 0.6, fontSize: 14 }}>這一格是空的。多撿東西、多跟同學互動吧。</div>}
+          </div>
+          <div style={{ fontSize: 12, opacity: 0.7, marginTop: 6 }}>飢餓 {st.h}｜精力 {st.e}</div>
+        </div>
+      )}
+      {cfg && (
+        <div style={overlay} onClick={(e) => e.stopPropagation()}>
+          <X onClick={() => setCfg(false)} />
+          <h2 style={{ margin: "0 0 8px", color: "#a3225c" }}>AI 設定</h2>
+          <div style={{ ...fsx, marginBottom: 10 }}>{[["claude", "Claude（只在 claude.ai 內可用）"], ["gemini", "Gemini（自備 Key）"]].map(([k, l]) => <button key={k} className="btn" style={{ background: prov === k ? "#ec5f92" : undefined, color: prov === k ? "#fff" : undefined }} onClick={() => setProv(k)}>{l}</button>)}</div>
+          {prov === "gemini" && <div style={{ display: "grid", gap: 8 }}>
+            <input type="password" value={key} onChange={(e) => setKey(e.target.value)} placeholder="貼上 Gemini API Key" style={{ padding: 10, borderRadius: 12, border: "2px solid #ec5f92", fontSize: 14 }} />
+            <input value={model} onChange={(e) => setModel(e.target.value)} placeholder="模型名稱" style={{ padding: 10, borderRadius: 12, border: "2px solid #ec5f92", fontSize: 14 }} />
+            <div style={{ fontSize: 12, opacity: 0.75, lineHeight: 1.6 }}>Key 只存在這個畫面的記憶體裡，關掉就消失，只會直接送到 Google。</div></div>}
+          <div style={{ ...fsx, marginTop: 12, flexWrap: "wrap" }}><button className="btn" onClick={testConn}>🔌 測試連線</button><span style={{ fontSize: 13 }}>{test}</span></div>
+        </div>
+      )}
+      {panel && (
+        <div style={overlay} onClick={(e) => e.stopPropagation()}>
+          <X onClick={() => setPanel(false)} />
+          <h2 style={{ margin: "0 0 8px", color: "#a3225c" }}>💗 好感度</h2>
+          {Object.keys(P).filter((k) => !["bd", "mz", "me"].includes(k)).map((k) => <div key={k} style={{ display: "flex", alignItems: "center", gap: 8, margin: "5px 0", fontSize: 13 }}><span style={{ width: 96 }}>{P[k][0]}</span><span style={{ flex: 1, height: 9, background: "#f7cfe0", borderRadius: 5 }}><i style={{ display: "block", height: "100%", width: aff(k) + "%", background: "#ec5f92", borderRadius: 5 }} /></span><span style={{ width: 28 }}>{aff(k)}</span></div>)}
+        </div>
+      )}
+    </div>
+  );
+}
+
+ReactDOM.createRoot(document.getElementById("root")).render(<QibanGalGame />);
+</script></body></html>
