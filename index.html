@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+<html lang="zh-Hant"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>柒班真是太可愛了</title>
+<style>html,body{margin:0;background:#ffe4ef}#root{height:100vh}</style>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/react/18.2.0/umd/react.production.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.2.0/umd/react-dom.production.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/7.23.5/babel.min.js"></script>
+</head><body><div id="root"></div>
+<script type="text/babel">
+const { useState, useEffect, useRef } = React;
+
+/* ---------- 30 位角色：全部用程式畫出的卡通 SVG（沒有外部圖片） ---------- */
+const S = "#f6d7b8", S2 = "#e8c19a", S3 = "#e0b48a";
+const P = {
+  wg:["王冠筌","#2b2b3a","spike",S,"🎹"], lw:["呂玟璋","#3b2a22","bowl",S,"📜"], lb:["李博滔","#5a4a8a","side",S,"📱"],
+  lc:["林冠辰","#222","short",S2,"🏸"], ly:["林宥豪","#2a2a2a","short",S2,"📏"], sc:["邵晨祐","#6b4a2a","side",S,"🍱"],
+  wy:["翁昱仁","#222","spike",S,"👓"], zj:["莊家豪","#3a2a1a","swoop",S,"🎸"], lx:["陳立軒","#4a3a2a","bowl",S,""],
+  cy:["陳言嘉","#2a2a2a","short",S,"⚡"], ch:["陳弘宇","#6a3a2a","side",S2,"🎧"], cb:["陳柏睿","#c9a227","swoop",S,"🏀"],
+  hy:["黃元銘","#222","spike",S3,"🏐"], hl:["黃立秦","#1f2a44","short",S,"🥁"], hx:["黃昱翔","#8a5a1a","bowl",S,"🌽"],
+  zy:["詹詠喬","#3a3a3a","side",S,""], lz:["賴子嵩","#2a2a2a","spike",S3,"📣"], yz:["顏子恆","#4a2a2a","short",S,""],
+  cs:["陳紹宇","#1a1a1a","swoop",S,"♟️"],
+  ym:["玉梅梅老師","#3a2a2a","bun",S,"📐","#c0517a"], ws:["翁崧筠老師","#333","side",S,"🏀","#556"], hg:["火哥","#333","bald",S2,"🔬","#fff"],
+  sj:["施金農老師","#222","short",S,"🎼","#334"], wm:["吳明霞老師","#2a2a3a","long",S,"∫","#6a4c93"], zt:["曾玉亨老師","#4a3a2a","long",S,"⚗️","#2a9d8f"],
+  hz:["胡志鋒老師","#222","spike",S3,"🏃","#d62828"], pr:["林裕豐校長","#555","bald",S,"🥝","#2d6a4f"], ab:["明偉便當阿伯","#777","cap",S3,"🍱","#e9c46a"],
+  jg:["教官","#222","cap",S2,"📢","#4b5320"], bd:["隔壁班同學","#5a3a2a","short",S,"👀"], mz:["路人甲","#2a3a4a","side",S,""],
+};
+const TEACH = new Set(["ym","ws","hg","sj","wm","zt","hz","pr","ab","jg"]);
+
+function Sprite({ id, mood = "n" }) {
+  const [, hair, style, skin, acc, suit] = P[id];
+  const shirt = suit || "#f4d54a", pants = suit ? "#333" : "#8fae4f";
+  const hairBack = style === "long" || style === "bun";
+  return (
+    <svg viewBox="0 0 160 280" style={{ height: "100%", maxHeight: 340, filter: "drop-shadow(0 6px 8px #b0447a44)" }}>
+      {hairBack && <rect x="38" y="52" width="84" height="100" rx="30" fill={hair} />}
+      <rect x="52" y="222" width="22" height="54" rx="7" fill={pants} />
+      <rect x="86" y="222" width="22" height="54" rx="7" fill={pants} />
+      <path d="M38 150 Q80 128 122 150 L128 232 L32 232 Z" fill={shirt} stroke="#0002" />
+      <rect x="22" y="152" width="18" height="62" rx="9" fill={shirt} /><rect x="120" y="152" width="18" height="62" rx="9" fill={shirt} />
+      <rect x="68" y="124" width="24" height="26" fill={skin} />
+      <ellipse cx="42" cy="92" rx="6" ry="9" fill={skin} /><ellipse cx="118" cy="92" rx="6" ry="9" fill={skin} />
+      <ellipse cx="80" cy="88" rx="38" ry="42" fill={skin} />
+      {style === "spike" && <path d="M40 80 L38 40 L52 56 L58 30 L72 50 L84 26 L96 50 L110 30 L112 56 L124 40 L120 80 Q80 52 40 80Z" fill={hair} />}
+      {style === "short" && <path d="M40 84 Q36 38 80 40 Q124 38 120 84 Q110 58 80 58 Q50 58 40 84Z" fill={hair} />}
+      {style === "side" && <path d="M40 86 Q34 36 82 38 Q126 40 120 84 Q108 54 62 62 Q46 66 40 86Z" fill={hair} />}
+      {style === "swoop" && <path d="M38 88 Q30 34 84 36 Q130 40 122 84 Q112 56 90 62 Q60 50 46 80Z" fill={hair} />}
+      {style === "bowl" && <path d="M38 94 Q34 38 80 38 Q126 38 122 94 L116 66 Q80 56 44 66Z" fill={hair} />}
+      {(style === "long" || style === "bun") && <path d="M40 90 Q36 38 80 38 Q124 38 120 90 Q108 58 80 60 Q52 58 40 90Z" fill={hair} />}
+      {style === "bun" && <circle cx="80" cy="30" r="14" fill={hair} />}
+      {style === "cap" && <><path d="M40 70 Q40 36 80 36 Q120 36 120 70Z" fill={suit} /><rect x="38" y="66" width="60" height="9" rx="4" fill={suit} /></>}
+      {style === "bald" && <path d="M46 62 Q80 40 114 62 Q110 52 80 50 Q50 52 46 62Z" fill={hair} opacity=".35" />}
+      {mood !== "h" && <><ellipse cx="62" cy="96" rx="9" ry="10" fill="#fff" stroke="#3a2a1a33" /><ellipse cx="98" cy="96" rx="9" ry="10" fill="#fff" stroke="#3a2a1a33" /><circle cx="63" cy="98" r="5.5" fill="#2a2a3a" /><circle cx="99" cy="98" r="5.5" fill="#2a2a3a" /><circle cx="65" cy="95" r="2" fill="#fff" /><circle cx="101" cy="95" r="2" fill="#fff" /></>}
+      {mood === "h" && <path d="M52 99 Q62 87 72 99 M88 99 Q98 87 108 99" stroke="#3a2a1a" strokeWidth="3.5" fill="none" strokeLinecap="round" />}
+      <path d={mood === "a" ? "M50 80 L72 88 M110 80 L88 88" : "M52 82 Q62 78 72 82 M88 82 Q98 78 108 82"} stroke="#3a2a1a" strokeWidth="3" fill="none" strokeLinecap="round" />
+      <ellipse cx="52" cy="112" rx="8" ry="5" fill="#ff8aa855" /><ellipse cx="108" cy="112" rx="8" ry="5" fill="#ff8aa855" />
+      <path d={mood === "h" ? "M66 116 Q80 132 94 116Z" : mood === "a" ? "M68 124 Q80 114 92 124" : mood === "s" ? "M80 118 m-6 0 a6 7 0 1 0 12 0 a6 7 0 1 0 -12 0" : "M68 120 Q80 128 92 120"} fill={mood === "h" || mood === "s" ? "#c0394f" : "none"} stroke="#7a2a2a" strokeWidth="2.5" strokeLinecap="round" />
+      {acc === "👓" && <g fill="none" stroke="#333" strokeWidth="3"><circle cx="62" cy="96" r="13" /><circle cx="98" cy="96" r="13" /><path d="M75 96 H85" /></g>}
+      {acc === "🎧" && <g><path d="M38 90 Q80 6 122 90" stroke="#333" strokeWidth="6" fill="none" /><rect x="30" y="84" width="14" height="26" rx="6" fill="#e63946" /><rect x="116" y="84" width="14" height="26" rx="6" fill="#e63946" /></g>}
+      {!["👓", "🎧", ""].includes(acc) && <text x="80" y="198" fontSize="38" textAnchor="middle">{acc}</text>}
+    </svg>
+  );
+}
+
+const win = (x, y, w = 90, h = 110) => <g><rect x={x} y={y} width={w} height={h} rx="6" fill="#d8f0ff" stroke="#fff" strokeWidth="6" /><path d={`M${x + w / 2} ${y} V${y + h} M${x} ${y + h / 2} H${x + w}`} stroke="#fff" strokeWidth="4" /><circle cx={x + 20} cy={y + 24} r="8" fill="#fff" opacity=".7" /></g>;
+function Bg({ k }) {
+  const petals = [[60, 80], [200, 40], [420, 90], [640, 60], [700, 180], [120, 220], [560, 240]].map(([x, y], i) => <ellipse key={i} cx={x} cy={y} rx="7" ry="4" fill="#fff" opacity=".55" transform={`rotate(${i * 30} ${x} ${y})`} />);
+  const body = {
+    room: <><rect width="760" height="700" fill="#ffe6f0" /><rect y="470" width="760" height="230" fill="#e9b4c8" />{win(40, 60)}{win(600, 60)}<rect x="190" y="70" width="380" height="190" rx="8" fill="#5f7f6c" stroke="#c99" strokeWidth="10" /><text x="380" y="150" fontSize="38" textAnchor="middle" fill="#fff" opacity=".85">高三 307 班</text><text x="380" y="205" fontSize="22" textAnchor="middle" fill="#fff" opacity=".6">奇異果子民，起來！</text>{[0, 1, 2].map((i) => <rect key={i} x={70 + i * 230} y="480" width="170" height="70" rx="8" fill="#d99ab4" />)}</>,
+    hall: <><rect width="760" height="700" fill="#ffe3ef" /><rect y="450" width="760" height="250" fill="#f3c2d6" />{[0, 1, 2].map((i) => <g key={i}>{win(300 + i * 150, 90, 110, 150)}</g>)}{[0, 1, 2, 3].map((i) => <rect key={i} x={20 + i * 70} y="150" width="60" height="300" rx="6" fill="#ee9fbd" stroke="#fff" strokeWidth="4" />)}{[0, 1, 2, 3, 4, 5].map((i) => <path key={i} d={`M${i * 140} 700 L${380 + (i - 2.5) * 20} 450`} stroke="#fff" opacity=".5" strokeWidth="3" />)}</>,
+    coop: <><rect width="760" height="700" fill="#fff0e4" /><rect y="460" width="760" height="240" fill="#f7c4d4" />{[0, 1, 2, 3, 4, 5, 6, 7].map((i) => <rect key={i} x={i * 100 - 20} y="60" width="100" height="70" fill={i % 2 ? "#fff" : "#ff8fb8"} />)}<text x="380" y="190" fontSize="46" textAnchor="middle" fill="#a3225c">合作社</text><rect x="70" y="250" width="620" height="200" rx="10" fill="#fff" opacity=".85" /><text x="380" y="320" fontSize="26" textAnchor="middle" fill="#a3225c">謝師父便當　八方雲集辣味鍋貼　小米便當</text><text x="380" y="380" fontSize="22" textAnchor="middle" fill="#d0647a">第三節下課只能用卡</text></>,
+    music: <><rect width="760" height="700" fill="#f6dcff" /><rect y="480" width="760" height="220" fill="#d8aee4" />{[0, 1, 2, 3, 4].map((i) => <path key={i} d={`M40 ${110 + i * 16} H720`} stroke="#fff" strokeWidth="3" opacity=".7" />)}<text x="140" y="150" fontSize="46" fill="#fff">♪</text><text x="400" y="130" fontSize="40" fill="#fff">♫</text><rect x="470" y="330" width="250" height="160" rx="10" fill="#3b2a4a" />{[0, 1, 2, 3, 4, 5, 6].map((i) => <rect key={i} x={478 + i * 34} y="440" width="30" height="50" fill="#fff" />)}<path d="M0 0 Q80 200 20 460 L0 460Z M760 0 Q680 200 740 460 L760 460Z" fill="#ff9fc4" opacity=".7" /></>,
+    dusk: <><defs><linearGradient id="dk" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stopColor="#8e6bbf" /><stop offset=".6" stopColor="#ff7e8a" /><stop offset="1" stopColor="#ffd08a" /></linearGradient></defs><rect width="760" height="700" fill="url(#dk)" /><circle cx="560" cy="330" r="90" fill="#fff2c4" opacity=".9" /><path d="M0 560 H140 V440 H260 V520 H360 V400 H520 V500 H640 V460 H760 V700 H0Z" fill="#5a3a6a" />{[0, 1, 2, 3, 4, 5].map((i) => <rect key={i} x={170 + i * 90} y="450" width="26" height="30" fill="#ffe28a" opacity=".85" />)}</>,
+    gate: <><rect width="760" height="700" fill="#ffd9ec" /><circle cx="130" cy="110" r="60" fill="#fff6c8" /><rect y="520" width="760" height="180" fill="#f2b8d0" /><rect x="120" y="260" width="40" height="270" fill="#fff" /><rect x="600" y="260" width="40" height="270" fill="#fff" /><rect x="100" y="230" width="560" height="60" rx="10" fill="#7fa04a" /><text x="380" y="272" fontSize="34" textAnchor="middle" fill="#fff8c4">武陵高中・奇異果節</text>{[0, 1, 2].map((i) => <circle key={i} cx={60 + i * 320} cy="470" r="70" fill="#ff9fc4" opacity=".6" />)}</>,
+    lab: <><rect width="760" height="700" fill="#dff6f2" /><rect y="460" width="760" height="240" fill="#bfe3dc" />{win(50, 70)}<rect x="360" y="80" width="340" height="170" rx="8" fill="#fff" stroke="#9cc" strokeWidth="6" /><text x="530" y="160" fontSize="30" textAnchor="middle" fill="#2a9d8f">Mitochondria</text><text x="530" y="205" fontSize="20" textAnchor="middle" fill="#2a9d8f" opacity=".7">諾貝爾獎？有吧。</text><rect y="400" width="760" height="70" fill="#8cc9bf" />{[0, 1, 2, 3].map((i) => <path key={i} d={`M${120 + i * 160} 400 l-18 -60 h36z`} fill="#ff9fc4" opacity=".8" />)}</>,
+  }[k] || null;
+  return <svg viewBox="0 0 760 700" preserveAspectRatio="xMidYMid slice" style={{ position: "absolute", inset: 0, width: "100%", height: "100%" }}>{body}{petals}</svg>;
+}
+
+/* ---------- 遊戲內容 ---------- */
+const ITEMS = {
+  chocolate: ["🍫", "巧克力", "林冠辰最愛的東西。可以吃（飢餓 +10），也可以送人。", { h: 10 }],
+  羽球: ["🏸", "羽球", "在王冠筌座位旁撿到的。林冠辰應該會想要。"],
+  筆: ["🖊️", "沒水的筆", "寫不出字，但很有重量感。"],
+  奧利多水: ["🥤", "奧利多水", "火哥的對賭獎品。精力 +15。", { e: 15 }],
+  鍋貼: ["🥟", "辣味鍋貼", "八方雲集的。飢餓 +25。", { h: 25 }],
+  便當: ["🍱", "明偉便當", "阿伯加菜的。飢餓 +40。", { h: 40 }],
+  奇異果: ["🥝", "奇異果", "武陵的象徵。飢餓 +10、精力 +5。", { h: 10, e: 5 }],
+};
+const info = (n) => ITEMS[n] || ["🎁", n, "不知道是什麼，但看起來有用。"];
+const SLOTS = 20;
+const ROUTE = ["wg", "lc", "zj", "hx", "hg", "ym", "cb", "hy"];
+const END = {
+  wg: ["🎹 鋼琴與口頭禪", "他在鋼琴前亂彈一通，罵了句 Fxxk you bxxxh，然後認真問你：「明天上課繼續聊？」"],
+  lc: ["🏸 巧克力的約定", "林冠辰把那條巧克力收進球袋，說明天要用一顆羽球回禮。"],
+  zj: ["🎸 吉他與棋局", "「啊我就沒有說你彈不好啊。」他笑著撥了一個和弦。"],
+  hx: ["🌽 玉米的朋友", "玉米今天遲到了，但他說，明天一定準時來找你。"],
+  hg: ["🔬 Nature 之路", "火哥說：「先把 mi-to-KHON-dria 唸標準，再談 Nature。」這是最溫暖的師徒約定。"],
+  ym: ["📐 U mei mei 的關心", "「Timing！」她塞給你一盒糖果，叫你早點回家休息。"],
+  cb: ["🏀 小多的一千顆籃球", "小多說下次辦籃球賽，籃球他全包。頂多買一千顆。"],
+  hy: ["🏐 舉球手的邀請", "黃元銘把拖把往空中一拋：「明天來打排球！」"],
+  none: ["🥝 柒班就是最好的結局", "沒有人特別突出，但全班一起走出校門。因為叫柒班，真的太可愛了。"],
+};
+// 每個選項：t 文字、dc 難度（無則不擲骰）、ok/no 結果 {a:好感,l:台詞[[who,text,mood]],h,e,m 小過,item}、go 下一幕
+const SC = {
+  s1: { d: "8:00　團體活動時間", bg: "room", L: [
+    ["", "開學日。307 班（柒班）的教室裡，沈玉梅老師站在講台前。"],
+    ["ym", "都高三了，就不要再滑手機了。手機不要放在跟自己同一個房間。Timing 很重要。", "a"],
+    ["wg", "{g:欸，你昨天作業寫完沒？你應該寫了吧，女生的筆記都比較整齊啦。|欸，你昨天作業寫完沒？……|欸，你昨天作業寫完沒？……}", "n"],
+    ["wg", "{g:Fxxk you bxxxh。|Fxxk you bxxxh。|Fxxk you bxxxh。}", "a"],
+    ["zj", "{g:啊我就沒有說你可以這樣講啊。人家寫得好是人家努力。||}", "n"],
+    ["", "{g:全班都是男生，你是唯一的女生，但今天大家只顧著抱怨作業。|全班都是男生，你也是其中一個。|全班都是男生，大家都習慣叫你「同學」。}教室後面有三張躺椅，牆上還有個通往隔壁班的洞。這就是你的高三。"]],
+    C: [
+      { t: "小聲回聊：「借你抄啦」", dc: 10, ok: { a: { wg: 2 }, l: [["wg", "{g:你真的很夠意思，比我想的好多了。|你真的很夠意思。|你真的很夠意思。}", "h"]] }, no: { a: { wg: -1, ym: -1 }, m: 0, l: [["ym", "又在聊天？Timing！", "a"]] }, go: "s2" },
+      { t: "專心聽，順便舉手附和", ok: { a: { ym: 2 }, l: [["ym", "很好，這樣才對。", "h"]] }, go: "s2" },
+      { t: "偷滑手機", dc: 12, ok: { l: [["", "你成功沒被發現。你覺得自己很強。"]] }, no: { a: { ym: -3 }, m: 1, l: [["ym", "又在打電動？手機給我。", "a"]] }, go: "s2" }] },
+  s2: { d: "9:50　第 2 節下課・打掃時間", bg: "hall", L: [
+    ["", "二十分鐘的打掃時間。你在走廊撞見剛練完球的林冠辰。"],
+    ["lc", "那個……你手上是巧克力嗎。我不是要搶，只是有點低血糖。", "n"]],
+    C: [
+      { t: "把巧克力送給他", dc: 6, ok: { a: { lc: 5 }, item: "chocolate", l: [["lc", "謝謝。我會記得。", "h"]] }, no: { a: { lc: 2 }, l: [["", "他收下了，耳根有點紅。"]] }, go: "s3" },
+      { t: "「這是我的，不能給。」", ok: { a: { lc: -3 }, l: [["lc", "……好吧。", "n"]] }, go: "s3" },
+      { t: "邊掃地邊找東西撿", dc: 10, ok: { item: "羽球", l: [["", "你在王冠筌的座位旁撿到一顆羽球。「這一定又是他的。」"]] }, no: { l: [["ym", "那邊的窗戶還沒擦。Timing！", "a"]] }, go: "s3" }] },
+  s3: { d: "10:10　數學甲（吳明霞）", bg: "room", L: [
+    ["", "無名俠吳明霞走進教室，空氣瞬間安靜。"],
+    ["wm", "今天複習微積分。有人想上台嗎？", "n"],
+    ["zj", "啊我就沒有要上台啊。", "n"]],
+    C: [
+      { t: "舉手上台解題", dc: 16, ok: { a: { wm: 2, hl: 2 }, e: -4, l: [["wm", "不錯。", "h"], ["hl", "冷靜，有條理。你可以的。", "n"]] }, no: { a: { wm: -1 }, e: -8, l: [["wm", "再想想。全班陪你想。", "a"]] }, go: "s4" },
+      { t: "搗蛋（在她的課上，危險）", dc: 20, ok: { a: { zj: 3 }, l: [["", "奇蹟般沒事。全班看你的眼神像在看勇者。"]] }, no: { m: 1, a: { wm: -4 }, e: -10, l: [["wm", "你，下課來找我。", "a"]] }, go: "s4" },
+      { t: "低頭假裝在寫筆記", ok: { e: -3, l: [["", "安全過關。"]] }, go: "s4" }] },
+  s4: { d: "11:10　生物（火哥）", bg: "lab", L: [
+    ["hg", "小老師，上課了嗎？", "n"], ["zj", "上課了。", "n"],
+    ["hg", "今天講 mi-to-KHON-dria。你們覺得這有得過諾貝爾獎嗎？", "h"], ["wy", "有吧。", "n"],
+    ["hg", "對，那是某年的諾貝爾獎。順帶一提，沒有 Nature 我不會被打動。", "n"]],
+    C: [
+      { t: "用生物專有名詞回答", dc: 12, ok: { a: { hg: 2, hl: 1 }, item: "奧利多水", l: [["hg", "發音要再標準一點，但很好。", "h"]] }, no: { a: { hg: -1 }, l: [["", "你把原文唸成了別的東西。"]] }, go: "s5" },
+      { t: "跟翁昱仁一起說幹話", dc: 10, ok: { a: { wy: 2 }, l: [["wy", "你懂我。", "h"]] }, no: { a: { hg: -2 }, l: [["hg", "先講重點，再講幹話。", "a"]] }, go: "s5" },
+      { t: "趴下睡覺", ok: { e: 15, a: { hg: -2 }, l: [["", "精力回復，但火哥看到了。"]] }, go: "s5" }] },
+  s5: { d: "12:00　午餐", bg: "coop", L: [
+    ["", "第 4 節下課，可以用現金去合作社：謝師父便當、八方雲集辣味鍋貼、小米便當。"],
+    ["sc", "要訂午餐嗎？我先墊。", "n"],
+    ["ab", "少年仔，明偉便當不在合作社，在外面，收現金。", "h"]],
+    C: [
+      { t: "合作社買鍋貼", dc: 9, ok: { item: "鍋貼", l: [["", "你買到了八方雲集辣味鍋貼，放進背包。"]] }, no: { h: 10, l: [["", "排隊太久，只吃到半份。"]] }, go: "s6" },
+      { t: "找明偉便當阿伯", ok: { item: "便當", a: { ab: 3, wy: 1 }, l: [["ab", "加菜給你。", "h"]] }, go: "s6" },
+      { t: "請邵晨祐訂外食", dc: 12, ok: { h: 40, a: { sc: 2 }, l: [["", "外食送到，沒被抓。"]] }, no: { a: { pr: -3 }, l: [["pr", "同學，外食不行喔。", "a"]] }, go: "s6" },
+      { t: "找小多聊籃球", ok: { a: { cb: 2 }, l: [["cb", "我買籃球，頂多買一千顆。", "h"]] }, go: "s6" }] },
+  s6: { d: "12:40　午休", bg: "room", L: [
+    ["", "午休。教室後面的三張躺椅，先到先得。"],
+    ["ym", "不午睡的人，趕快回去睡。Timing！", "a"]],
+    C: [
+      { t: "搶一張躺椅", dc: 10, ok: { e: 30, l: [["", "你躺上去，世界變得很安靜。"]] }, no: { e: 15, l: [["", "被王冠筌搶走，只能趴桌。"]] }, go: "s7" },
+      { t: "打開牆上的洞偷看隔壁班", dc: 9, ok: { l: [["", "隔壁班在睡覺。"]] }, no: { l: [["bd", "（怒視）", "a"]] }, go: "s7" },
+      { t: "撿東西", dc: 12, ok: { item: "筆", l: [["", "撿到一支沒水的筆。"]] }, no: { m: 0, e: -10, l: [["hy", "那是我上禮拜的便當。", "n"], ["", "你碰到發臭的便當，中毒了。"]] }, go: "s7" }] },
+  s7: { d: "15:00　音樂（施金農）", bg: "music", L: [
+    ["sj", "Discipline！Energy and Power！", "a"],
+    ["sj", "大家不準時，這是紀律問題！", "a"],
+    ["", "整堂音樂課，幾乎沒有音樂。"]],
+    C: [
+      { t: "大聲喊 Energy and Power", dc: 11, ok: { a: { sj: 3, lc: 2 }, l: [["sj", "很好！", "h"]] }, no: { a: { sj: -2 }, l: [["sj", "你，站起來！", "a"]] }, go: "s8" },
+      { t: "偷偷撩李博滔", ok: { a: { lb: 0 }, l: [["lb", "抱歉，我只愛古明地戀。", "n"]] }, go: "s8" },
+      { t: "請莊家豪吉他伴奏", dc: 11, ok: { a: { zj: 3 }, l: [["zj", "啊我就沒有說不彈啊。", "h"]] }, no: { l: [["", "他假裝沒聽到。"]] }, go: "s8" }] },
+  s8: { d: "放學　黃昏", bg: "dusk", L: [["", "夕陽把教室染成橘色。今天的最後一件事，是選擇和誰一起走。"]],
+    C: [
+      { t: "王冠筌：一起彈琴、聊天", ok: { a: { wg: 3 } }, go: "end" }, { t: "林冠辰：羽球和巧克力", ok: { a: { lc: 3 } }, go: "end" },
+      { t: "莊家豪：去聽吉他", ok: { a: { zj: 3 } }, go: "end" }, { t: "火哥：去辦公室聊 Nature", ok: { a: { hg: 3 } }, go: "end" },
+      { t: "玉梅梅：留下整理教室", ok: { a: { ym: 3 } }, go: "end" }] },
+};
+
+const mod = (n) => Math.floor(n / 2);
+function QibanGalGame() {
+  const [name, setName] = useState("柒班新生");
+  const [g, setG] = useState("m");
+  const [st, setSt] = useState({ on: false, sc: "s1", q: null, fi: 0, aff: {}, h: 80, e: 80, m: 0, inv: [], roll: null, end: null });
+  const [inp, setInp] = useState(""), [busy, setBusy] = useState(false);
+  const [prov, setProv] = useState("gemini"), [key, setKey] = useState(""), [model, setModel] = useState("gemini-2.5-flash"), [cfg, setCfg] = useState(false);
+  const [txt, setTxt] = useState(""), [panel, setPanel] = useState(false), done = useRef(false);
+  P.me = [name || "你", "#3a2a2a", g === "f" ? "long" : "short", S, ""];
+  const gt = (t) => t.replace(/\{g:([^|}]*)\|([^|}]*)\|?([^}]*)\}/g, (_, f, m, x) => (g === "f" ? f : g === "x" ? x || m : m));
+  const aff = (k) => (st.aff[k] ?? 10);
+  const scene = SC[st.sc];
+  const frames = (st.q ? st.q.f : scene ? scene.L : []).filter((fr) => gt(fr[1]) !== "");
+  const f = frames[st.fi] || ["", ""];
+  const atEnd = st.fi >= frames.length - 1;
+  const full = gt(st.end ? END[st.end][1] : f[1]);
+  const who = st.end ? null : f[0];
+  const mood = f[2] || "n";
+
+  useEffect(() => {
+    done.current = false; setTxt("");
+    let i = 0; const t = setInterval(() => { i++; setTxt(full.slice(0, i)); if (i >= full.length) { done.current = true; clearInterval(t); } }, 22);
+    return () => clearInterval(t);
+  }, [full, st.sc, st.fi, st.q]);
+
+  const click = () => {
+    if (!st.on || (st.end)) return;
+    if (!done.current) { done.current = true; setTxt(full); return; }
+    if (!atEnd) setSt((s) => ({ ...s, fi: s.fi + 1 }));
+    else if (st.q) setSt((s) => (s.q.go === "end" ? ending(s) : s.q.go === "stay" ? { ...s, q: null, fi: SC[s.sc].L.filter((fr) => gt(fr[1]) !== "").length - 1, roll: null } : { ...s, sc: s.q.go, q: null, fi: 0, roll: null }));
+  };
+  const ending = (s) => { let b = "none", m = 0; ROUTE.forEach((k) => { if ((s.aff[k] ?? 10) > m) m = s.aff[k] ?? 10; }); ROUTE.forEach((k) => { if (b === "none" && (s.aff[k] ?? 10) === m && m >= 22) b = k; }); return { ...s, end: b }; };
+
+  const [test, setTest] = useState("");
+  const [bag, setBag] = useState(false), [sel, setSel] = useState(0);
+  const stacks = [];
+  st.inv.forEach((n) => { const e = stacks.find((x) => x.n === n); e ? e.c++ : stacks.push({ n, c: 1 }); });
+  const useItem = (n) => setSt((s) => { const i = s.inv.indexOf(n); if (i < 0) return s; const eff = info(n)[3] || {}; return { ...s, inv: s.inv.filter((_, k) => k !== i), h: Math.min(100, s.h + (eff.h || 0)), e: Math.min(100, s.e + (eff.e || 0)) }; });
+  const dropItem = (n) => setSt((s) => { const i = s.inv.indexOf(n); return i < 0 ? s : { ...s, inv: s.inv.filter((_, k) => k !== i) }; });
+  const callLLM = async (sys, usr) => {
+    if (prov === "gemini") {
+      if (!key.trim()) throw new Error("請先填入 Gemini API Key");
+      const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/${encodeURIComponent(model)}:generateContent?key=${encodeURIComponent(key.trim())}`, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ systemInstruction: { parts: [{ text: sys }] }, contents: [{ role: "user", parts: [{ text: usr }] }], generationConfig: { responseMimeType: "application/json" } }) });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error?.message || res.status);
+      return (data.candidates?.[0]?.content?.parts || []).map((x) => x.text || "").join("");
+    }
+    const res = await fetch("https://api.anthropic.com/v1/messages", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ model: "claude-sonnet-4-6", max_tokens: 1000, system: sys, messages: [{ role: "user", content: usr }] }) });
+    const data = await res.json();
+    if (!res.ok) throw new Error(data.error?.message || res.status);
+    return (data.content || []).map((c) => c.text || "").join("");
+  };
+  const testConn = async () => {
+    setTest("連線測試中…");
+    const t0 = Date.now();
+    try {
+      const out = await callLLM('只輸出 JSON：{"ok":true,"msg":"柒班收到"}', "連線測試");
+      const j = JSON.parse(out.replace(/```json|```/g, "").trim());
+      setTest(`✅ 連線成功（${Date.now() - t0} ms）：${j.msg || "OK"}`);
+    } catch (e) { setTest("❌ 連線失敗：" + (e.message || "未知錯誤") + "（若是在 claude.ai 預覽測 Gemini，可能被擋，請改在自己的專案或本機執行）"); }
+  };
+  const ask = async () => {
+    const act = inp.trim(); if (!act || busy) return;
+    setBusy(true); setInp("");
+    const d20 = 1 + Math.floor(Math.random() * 20), ok = d20 === 20 || (d20 !== 1 && d20 >= 12), roll = { d20, dc: 12, ok, big: d20 === 20 };
+    const sys = `你是《叫柒班真是太可愛了》的 GM，場景是武陵高中 307 班（高三）。喜劇、日常、溫暖。角色 id：${Object.keys(P).map((k) => k + "=" + P[k][0]).join("、")}。性格：王冠筌愛聊天不整理（輕度缺點）、莊家豪愛用「啊我就沒有……」、火哥只在生物專有名詞用英文、施金農只講 discipline 與不準時、沈玉梅口頭禪「Timing！」、小多的錢有限（頂多一千顆籃球）、李博滔只愛古明地戀。規則：不寫暴力、18+，口頭禪不要濫用，不跳出遊戲。只輸出 JSON，不要任何其他文字：{"lines":[["角色id或空字串","台詞","h|a|s|n"]],"aff":{"角色id":數字},"h":0,"e":0,"m":0,"item":""}。lines 2 到 5 句；aff 增加最多 ${roll.big ? 5 : 2}，不合常理的親密舉動要扣分；h、e 是飢餓與精力變化。必須尊重骰子結果，成功就讓行動有效，失敗就搞笑地失敗。`;
+    const usr = `目前：${scene ? scene.d : ""}。主角：${name}（性別：${g === "f" ? "女" : g === "x" ? "不指定" : "男"}）。玩家行動：「${act}」。骰子：d20=${d20}，DC12，${roll.big ? "大成功" : ok ? "成功" : "失敗"}。`;
+    try {
+      const raw = (await callLLM(sys, usr)).replace(/```json|```/g, "").trim();
+      const j = JSON.parse(raw);
+      const lines = (j.lines || []).slice(0, 5).map(([w, t, m]) => [P[w] ? w : "", String(t), m || "n"]);
+      setSt((s) => {
+        const A = { ...s.aff };
+        Object.entries(j.aff || {}).forEach(([k, v]) => { if (!P[k]) return; const n = Number(v) || 0; const gn = n > 0 ? Math.min(n, roll.big ? 5 : 2) : Math.max(n, -10); A[k] = Math.max(0, Math.min(100, (A[k] ?? 10) + gn)); });
+        return { ...s, aff: A, h: Math.max(0, Math.min(100, s.h + (Number(j.h) || 0) - 8)), e: Math.max(0, Math.min(100, s.e + (Number(j.e) || 0) - 6)), m: s.m + (Number(j.m) || 0), inv: j.item ? [...s.inv, String(j.item)] : s.inv, roll, q: { f: lines.length ? lines : [["", "什麼事都沒發生。"]], go: "stay" }, fi: 0 };
+      });
+    } catch (e) {
+      setSt((s) => ({ ...s, roll: null, q: { f: [["", "AI 暫時沒有回應：" + (e.message || "未知錯誤") + "。可以換個說法再試，或到 ⚙ 檢查設定。"]], go: "stay" }, fi: 0 }));
+    }
+    setBusy(false);
+  };
+  const pick = (c) => {
+    const d20 = 1 + Math.floor(Math.random() * 20), tot = d20 + mod(10);
+    let ok = true, roll = null;
+    if (c.dc) { ok = d20 === 20 || (d20 !== 1 && tot >= c.dc); roll = { d20, dc: c.dc, ok, big: d20 === 20 }; }
+    const r = (ok ? c.ok : c.no) || { l: [] };
+    setSt((s) => {
+      const A = { ...s.aff };
+      Object.entries(r.a || {}).forEach(([k, v]) => { const g = v > 0 ? Math.min(v, roll?.big ? 5 : 2) : v; A[k] = Math.max(0, Math.min(100, (A[k] ?? 10) + g)); });
+      const lines = r.l && r.l.length ? r.l : [["", ok ? "成功了。" : "沒成功。"]];
+      if (c.go === "end" && !r.l) return ending({ ...s, aff: A });
+      return { ...s, aff: A, h: Math.max(0, Math.min(100, s.h + (r.h || 0) - 8)), e: Math.max(0, Math.min(100, s.e + (r.e || 0) - 6)), m: s.m + (r.m || 0), inv: r.item ? [...s.inv, r.item] : s.inv, roll, q: { f: lines, go: c.go }, fi: 0 };
+    });
+  };
+
+  const bgk = st.on && scene && !st.end ? scene.bg : st.end ? "dusk" : "gate";
+  const sp = !st.end && who && P[who] ? who : null;
+  const showChoices = st.on && !st.q && atEnd && done.current && !st.end && scene;
+  return (
+    <div style={{ height: "100vh", maxWidth: 760, margin: "0 auto", background: "#ffe4ef", position: "relative", overflow: "hidden", fontFamily: "'Noto Sans TC','PingFang TC','Microsoft JhengHei',sans-serif", color: "#3a2430", userSelect: "none" }} onClick={click}>
+      <Bg k={bgk} />
+      <style>{`.btn{background:#fff0f6f0;border:2px solid #ec5f92;border-radius:14px;padding:10px 14px;font-size:15px;cursor:pointer;text-align:left;color:#3a2430}.btn:hover{background:#ffd3e4}@media(prefers-reduced-motion:no-preference){.pop{animation:p .25s}}@keyframes p{from{transform:translateY(8px);opacity:0}}`}</style>
+      {!st.on && (
+        <div style={{ position: "absolute", inset: 0, zIndex: 5, background: "linear-gradient(#ffc2dc,#ff8fb8)", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", gap: 14, padding: 24 }} onClick={(e) => e.stopPropagation()}>
+          <div style={{ fontSize: 64 }}>🌸🥝</div>
+          <h1 style={{ margin: 0, fontSize: 30, textAlign: "center", color: "#a3225c" }}>柒班真是太可愛了</h1>
+          <div style={{ fontSize: 14 }}>武陵高中 307 班・高三開學日</div>
+          <div style={{ height: 150 }}><Sprite id="me" mood="h" /></div>
+          <input value={name} onChange={(e) => setName(e.target.value)} maxLength={8} style={{ padding: 10, borderRadius: 12, border: "2px solid #a3225c", fontSize: 16, textAlign: "center" }} />
+          <div style={{ display: "flex", gap: 8 }}>{[["m", "男生"], ["f", "女生"], ["x", "不指定"]].map(([k, l]) => <button key={k} className="btn" style={{ background: g === k ? "#a3225c" : undefined, color: g === k ? "#fff" : undefined }} onClick={() => setG(k)}>{l}</button>)}</div>
+          <button className="btn" onClick={() => setSt((s) => ({ ...s, on: true }))}>開始這一天</button>
+          <div style={{ fontSize: 12, opacity: 0.7, textAlign: "center" }}>所有角色皆為虛構。點擊畫面推進對話。</div>
+        </div>
+      )}
+      {st.on && (<>
+        <div style={{ position: "absolute", top: 8, left: 8, right: 8, display: "flex", justifyContent: "space-between", fontSize: 12, zIndex: 3 }} onClick={(e) => e.stopPropagation()}>
+          <span style={{ background: "#fff0f6e0", borderRadius: 10, padding: "4px 10px" }}>{st.end ? "結局" : scene?.d}</span>
+          <span style={{ background: "#fff0f6e0", borderRadius: 10, padding: "4px 10px" }}>飢餓 {st.h}｜精力 {st.e}｜小過 {st.m}</span>
+          <span style={{ display: "flex", gap: 4 }}><button className="btn" style={{ padding: "2px 10px", fontSize: 12 }} onClick={() => setBag(true)}>🎒</button><button className="btn" style={{ padding: "2px 10px", fontSize: 12 }} onClick={() => setCfg(true)}>⚙</button><button className="btn" style={{ padding: "2px 10px", fontSize: 12 }} onClick={() => setPanel(true)}>好感度</button></span>
+        </div>
+        <div style={{ position: "absolute", top: 44, bottom: 210, left: 0, right: 0, display: "flex", justifyContent: "center", alignItems: "flex-end" }}>
+          {st.end ? <div className="pop" style={{ fontSize: 90 }}>🥝</div> : sp && <div key={sp + st.fi} className="pop" style={{ height: "100%" }}><Sprite id={sp} mood={mood} /></div>}
+        </div>
+        {st.roll && st.q && <div style={{ position: "absolute", top: 46, left: "50%", transform: "translateX(-50%)", background: st.roll.ok ? "#c8f1b0" : "#ffc4c4", border: "2px solid #0003", borderRadius: 12, padding: "4px 12px", fontSize: 13, zIndex: 3 }}>🎲 {st.roll.d20}（DC {st.roll.dc}）{st.roll.big ? "大成功！" : st.roll.ok ? "成功" : "失敗"}</div>}
+        <div style={{ position: "absolute", left: 10, right: 10, bottom: 10, minHeight: 190, background: "#fff0f6f2", border: "3px solid #ec5f92", borderRadius: 18, padding: "20px 16px 12px" }}>
+          {(who || st.end) && <div style={{ position: "absolute", top: -16, left: 16, background: TEACH.has(who) ? "#b0447a" : "#ec5f92", color: "#fff", borderRadius: 12, padding: "3px 14px", fontWeight: 700 }}>{st.end ? END[st.end][0] : P[who]?.[0] ?? who}</div>}
+          <div style={{ fontSize: 16, lineHeight: 1.75, minHeight: 56 }}>{who && !st.end ? "「" : ""}{txt.replace(/\{name\}/g, name)}{who && !st.end && done.current ? "」" : ""}</div>
+          {!st.end && !showChoices && <div style={{ textAlign: "right", fontSize: 12, opacity: 0.5 }}>點一下繼續 ▼</div>}
+          {showChoices && <div style={{ display: "grid", gap: 7, marginTop: 6 }} onClick={(e) => e.stopPropagation()}>{scene.C.map((c, i) => <button key={i} className="btn pop" onClick={() => pick(c)}>{c.t}{c.dc ? `　🎲DC${c.dc}` : ""}</button>)}
+            <div style={{ display: "flex", gap: 6 }}><input value={inp} onChange={(e) => setInp(e.target.value)} onKeyDown={(e) => { if (e.key === "Enter" && !e.nativeEvent.isComposing) ask(); }} placeholder="自己決定要做什麼…（AI 會當 GM）" style={{ flex: 1, padding: 9, borderRadius: 12, border: "2px solid #ec5f92", fontSize: 14, background: "#fff", color: "#3a2430" }} /><button className="btn" disabled={busy} onClick={ask}>{busy ? "…" : "送出"}</button></div></div>}
+          {st.end && <button className="btn" style={{ marginTop: 8 }} onClick={(e) => { e.stopPropagation(); setSt({ on: false, sc: "s1", q: null, fi: 0, aff: {}, h: 80, e: 80, m: 0, inv: [], roll: null, end: null }); }}>再玩一次</button>}
+        </div>
+      </>)}
+      {bag && (
+        <div style={{ position: "absolute", inset: 0, background: "#fff0f6f8", zIndex: 9, padding: 14, overflow: "auto" }} onClick={(e) => e.stopPropagation()}>
+          <h2 style={{ margin: "0 0 10px", color: "#a3225c" }}>🎒 背包　<span style={{ fontSize: 13, fontWeight: 400 }}>{stacks.length}/{SLOTS} 格</span></h2>
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(5,1fr)", gap: 6, background: "#f7cfe0", padding: 8, borderRadius: 14, border: "3px solid #ec5f92" }}>
+            {Array.from({ length: SLOTS }).map((_, i) => { const it = stacks[i]; const on = sel === i; return (
+              <div key={i} onClick={() => setSel(i)} style={{ aspectRatio: "1", background: it ? "#fff" : "#ffffff88", border: on ? "3px solid #a3225c" : "2px solid #ec5f9288", borderRadius: 10, display: "flex", alignItems: "center", justifyContent: "center", fontSize: 30, position: "relative", cursor: "pointer", boxShadow: on ? "0 0 10px #ec5f92" : "none" }}>
+                {it && info(it.n)[0]}{it && it.c > 1 && <span style={{ position: "absolute", right: 4, bottom: 1, fontSize: 12, fontWeight: 700, color: "#a3225c" }}>x{it.c}</span>}
+              </div>); })}
+          </div>
+          <div style={{ marginTop: 10, minHeight: 92, background: "#fff", border: "3px solid #ec5f92", borderRadius: 14, padding: 12 }}>
+            {stacks[sel] ? (<>
+              <div style={{ fontSize: 18, fontWeight: 700, color: "#a3225c" }}>{info(stacks[sel].n)[0]} {info(stacks[sel].n)[1]}</div>
+              <div style={{ fontSize: 14, margin: "6px 0 8px", lineHeight: 1.6 }}>{info(stacks[sel].n)[2]}</div>
+              <div style={{ display: "flex", gap: 8 }}>{info(stacks[sel].n)[3] && <button className="btn" onClick={() => useItem(stacks[sel].n)}>使用</button>}<button className="btn" onClick={() => dropItem(stacks[sel].n)}>丟棄</button></div>
+            </>) : <div style={{ opacity: 0.6, fontSize: 14 }}>這一格是空的。多撿東西、多跟同學互動吧。</div>}
+          </div>
+          <div style={{ fontSize: 12, opacity: 0.7, marginTop: 6 }}>飢餓 {st.h}｜精力 {st.e}</div>
+          <button className="btn" style={{ marginTop: 10 }} onClick={() => setBag(false)}>關閉</button>
+        </div>
+      )}
+      {cfg && (
+        <div style={{ position: "absolute", inset: 0, background: "#fff0f6f8", zIndex: 9, padding: 18, overflow: "auto" }} onClick={(e) => e.stopPropagation()}>
+          <h2 style={{ margin: "0 0 8px", color: "#a3225c" }}>AI 設定</h2>
+          <div style={{ display: "flex", gap: 8, marginBottom: 10 }}>{[["claude", "Claude（只在 claude.ai 內可用）"], ["gemini", "Gemini（自備 Key）"]].map(([k, l]) => <button key={k} className="btn" style={{ background: prov === k ? "#ec5f92" : undefined, color: prov === k ? "#fff" : undefined }} onClick={() => setProv(k)}>{l}</button>)}</div>
+          {prov === "gemini" && <div style={{ display: "grid", gap: 8 }}>
+            <input type="password" value={key} onChange={(e) => setKey(e.target.value)} placeholder="貼上 Gemini API Key" style={{ padding: 10, borderRadius: 12, border: "2px solid #ec5f92", fontSize: 14 }} />
+            <input value={model} onChange={(e) => setModel(e.target.value)} placeholder="模型名稱" style={{ padding: 10, borderRadius: 12, border: "2px solid #ec5f92", fontSize: 14 }} />
+            <div style={{ fontSize: 12, opacity: 0.75, lineHeight: 1.6 }}>Key 只存在這個畫面的記憶體裡，關掉就消失，只會直接送到 Google。若在 claude.ai 預覽裡連不上 Gemini，請把這個檔案放到自己的 React 專案或本機執行。</div></div>}
+          <div style={{ display: "flex", gap: 8, alignItems: "center", marginTop: 12, flexWrap: "wrap" }}><button className="btn" onClick={testConn}>🔌 測試連線</button><span style={{ fontSize: 13 }}>{test}</span></div>
+          <button className="btn" style={{ marginTop: 12 }} onClick={() => setCfg(false)}>完成</button>
+        </div>
+      )}
+      {panel && (
+        <div style={{ position: "absolute", inset: 0, background: "#fff0f6f8", zIndex: 9, padding: 18, overflow: "auto" }} onClick={(e) => e.stopPropagation()}>
+          <h2 style={{ margin: "0 0 8px" }}>好感度　<span style={{ fontSize: 13, fontWeight: 400 }}>道具：{st.inv.length ? st.inv.join("、") : "無"}</span></h2>
+          {Object.keys(P).filter((k) => k !== "bd" && k !== "mz").map((k) => <div key={k} style={{ display: "flex", alignItems: "center", gap: 8, margin: "5px 0", fontSize: 13 }}><span style={{ width: 84 }}>{P[k][0]}</span><span style={{ flex: 1, height: 9, background: "#f7cfe0", borderRadius: 5 }}><i style={{ display: "block", height: "100%", width: aff(k) + "%", background: "#ec5f92", borderRadius: 5 }} /></span><span style={{ width: 28 }}>{aff(k)}</span></div>)}
+          <button className="btn" style={{ marginTop: 10 }} onClick={() => setPanel(false)}>關閉</button>
+        </div>
+      )}
+    </div>
+  );
+}
+
+ReactDOM.createRoot(document.getElementById("root")).render(<QibanGalGame />);
+</script></body></html>
