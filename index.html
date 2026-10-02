@@ -72,6 +72,10 @@ function Bg({ k }) {
     music: <><rect width="760" height="700" fill="#f6dcff" /><rect y="480" width="760" height="220" fill="#d8aee4" />{[0, 1, 2, 3, 4].map((i) => <path key={i} d={`M40 ${110 + i * 16} H720`} stroke="#fff" strokeWidth="3" opacity=".7" />)}<text x="140" y="150" fontSize="46" fill="#fff">♪</text><text x="400" y="130" fontSize="40" fill="#fff">♫</text><rect x="470" y="330" width="250" height="160" rx="10" fill="#3b2a4a" />{[0, 1, 2, 3, 4, 5, 6].map((i) => <rect key={i} x={478 + i * 34} y="440" width="30" height="50" fill="#fff" />)}<path d="M0 0 Q80 200 20 460 L0 460Z M760 0 Q680 200 740 460 L760 460Z" fill="#ff9fc4" opacity=".7" /></>,
     dusk: <><defs><linearGradient id="dk" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stopColor="#8e6bbf" /><stop offset=".6" stopColor="#ff7e8a" /><stop offset="1" stopColor="#ffd08a" /></linearGradient></defs><rect width="760" height="700" fill="url(#dk)" /><circle cx="560" cy="330" r="90" fill="#fff2c4" opacity=".9" /><path d="M0 560 H140 V440 H260 V520 H360 V400 H520 V500 H640 V460 H760 V700 H0Z" fill="#5a3a6a" />{[0, 1, 2, 3, 4, 5].map((i) => <rect key={i} x={170 + i * 90} y="450" width="26" height="30" fill="#ffe28a" opacity=".85" />)}</>,
     gate: <><rect width="760" height="700" fill="#ffd9ec" /><circle cx="130" cy="110" r="60" fill="#fff6c8" /><rect y="520" width="760" height="180" fill="#f2b8d0" /><rect x="120" y="260" width="40" height="270" fill="#fff" /><rect x="600" y="260" width="40" height="270" fill="#fff" /><rect x="100" y="230" width="560" height="60" rx="10" fill="#7fa04a" /><text x="380" y="272" fontSize="34" textAnchor="middle" fill="#fff8c4">武陵高中・奇異果節</text>{[0, 1, 2].map((i) => <circle key={i} cx={60 + i * 320} cy="470" r="70" fill="#ff9fc4" opacity=".6" />)}</>,
+    field: <><rect width="760" height="700" fill="#cfeaff" /><circle cx="620" cy="110" r="55" fill="#fff6c8" /><rect y="330" width="760" height="370" fill="#bfe8a8" /><ellipse cx="380" cy="560" rx="460" ry="190" fill="#e58a9a" /><ellipse cx="380" cy="560" rx="360" ry="130" fill="#bfe8a8" />{[0, 1, 2, 3].map((i) => <path key={i} d={`M${60 + i * 240} 360 q60 -40 120 0`} stroke="#fff" strokeWidth="6" fill="none" opacity=".7" />)}<rect x="60" y="250" width="14" height="110" fill="#fff" /><rect x="686" y="250" width="14" height="110" fill="#fff" /></>,
+    gym: <><rect width="760" height="700" fill="#ffe6f0" /><rect y="430" width="760" height="270" fill="#f0c89a" />{[0, 1, 2, 3, 4].map((i) => <path key={i} d={`M${i * 190} 700 L${380 + (i - 2) * 60} 430`} stroke="#fff" opacity=".5" strokeWidth="4" />)}<rect x="330" y="120" width="100" height="70" fill="#fff" stroke="#ec5f92" strokeWidth="6" /><circle cx="380" cy="205" r="18" fill="none" stroke="#ff7a3c" strokeWidth="6" /><text x="380" y="80" fontSize="34" textAnchor="middle" fill="#a3225c">體育館</text></>,
+    library: <><rect width="760" height="700" fill="#fff0e4" /><rect y="520" width="760" height="180" fill="#d9a98a" />{[0, 1, 2].map((r) => <g key={r}><rect x="40" y={80 + r * 130} width="680" height="110" rx="6" fill="#c99a7a" />{Array.from({ length: 18 }).map((_, i) => <rect key={i} x={55 + i * 37} y={92 + r * 130} width="26" height="86" fill={["#ff8fb8", "#ffd27a", "#9ad0ff", "#b8e08a"][(i + r) % 4]} />)}</g>)}</>,
+    office: <><rect width="760" height="700" fill="#ffe9f1" /><rect y="500" width="760" height="200" fill="#c9a0b4" /><rect x="120" y="360" width="520" height="120" rx="10" fill="#a8738c" /><rect x="320" y="90" width="120" height="180" fill="#7fa04a" /><text x="380" y="190" fontSize="40" textAnchor="middle" fill="#fff8c4">🥝</text><rect x="60" y="110" width="170" height="140" rx="8" fill="#fff" stroke="#ec5f92" strokeWidth="6" /><rect x="530" y="110" width="170" height="140" rx="8" fill="#fff" stroke="#ec5f92" strokeWidth="6" /></>,
     lab: <><rect width="760" height="700" fill="#dff6f2" /><rect y="460" width="760" height="240" fill="#bfe3dc" />{win(50, 70)}<rect x="360" y="80" width="340" height="170" rx="8" fill="#fff" stroke="#9cc" strokeWidth="6" /><text x="530" y="160" fontSize="30" textAnchor="middle" fill="#2a9d8f">Mitochondria</text><text x="530" y="205" fontSize="20" textAnchor="middle" fill="#2a9d8f" opacity=".7">諾貝爾獎？有吧。</text><rect y="400" width="760" height="70" fill="#8cc9bf" />{[0, 1, 2, 3].map((i) => <path key={i} d={`M${120 + i * 160} 400 l-18 -60 h36z`} fill="#ff9fc4" opacity=".8" />)}</>,
   }[k] || null;
   return <svg viewBox="0 0 760 700" preserveAspectRatio="xMidYMid slice" style={{ position: "absolute", inset: 0, width: "100%", height: "100%" }}>{body}{petals}</svg>;
@@ -108,11 +112,14 @@ const slotsOf = (day) => {
   L.push(["放學後", ""]);
   return L;
 };
+const PLACES = ["307教室", "走廊", "合作社", "音樂教室", "生物實驗室", "操場", "體育館", "活動中心", "圖書館", "校長室", "學務處", "校門", "蘊真樓教室", "躺椅區"];
+const PBG = { "307教室": "room", 走廊: "hall", 合作社: "coop", 音樂教室: "music", 生物實驗室: "lab", 操場: "field", 體育館: "gym", 活動中心: "gym", 圖書館: "library", 校長室: "office", 學務處: "office", 校門: "gate", 蘊真樓教室: "room", 躺椅區: "room" };
+const bgFor = (place, slotName) => (slotName && slotName.includes("放學") ? "dusk" : PBG[place] || "room");
 const TRAIT = "王冠筌(愛聊天不整理，口頭禪Fxxk you bxxxh只單獨成句，輕度厭女傾向是缺點)、呂玟璋(小正太，國文好，常拿扇子滑手機)、李博滔(音遊社長，負能量，只愛古明地戀)、林冠辰(羽球隊長，巧克力能打動他)、林宥豪(數理強，直尺劍術)、邵晨祐(有錢，訂午餐)、翁昱仁(生物奧賽，幹話，LeBron是唯一GOAT，愛明偉便當)、莊家豪(吉他帥潮，英文強，常說「啊我就沒有……」「你明明就有……」，生物小老師)、陳立軒(蠢蠢慢半拍好相處)、陳言嘉(普通同學，覺得回答蠢會說靠杯)、陳弘宇(音樂)、陳柏睿小多(最有錢但頂多買一千顆籃球，軍火禁止)、黃元銘(排球最強)、黃立秦(最聰明鼓手，不輕易破防)、黃昱翔玉米(偷偷喜歡主角，常早上不到)、詹詠喬、賴子嵩(體育股長，離譜才說何味道)、顏子恆(不爽說你媽)、陳紹宇(很少到校，句尾拉長，圍棋)；老師：沈玉梅(導師，U mei mei，口頭禪Timing！討厭中午不午睡)、翁崧筠(英文，厭世)、火哥(生物，只在生物專有名詞說英文，上課必說「小老師，上課了嗎」，莊家豪答「上課了」，會用奧利多水對賭成績)、施金農(音樂課幾乎不上音樂，只講discipline與大家不準時)、吳明霞(女，數學無名俠，在她課上搗蛋極危險)、曾玉亨(女，化學，會抓玩手機)、胡志鋒(體育)、校長林裕豐(和善，會抓外食)、明偉便當阿伯(合作社外攤位)、教官";
-const SYS = `你是《柒班真是太可愛了》的 GM。場景：武陵高中高三 307 班（柒班），導師沈玉梅，全班學生都是男生。基調：日常、溫暖、笑點密集的校園喜劇，描寫偏白描。全部劇情由你即興產生，沒有預設劇本，要依玩家行動自然推進。角色 id 對照：${Object.keys(P).filter((k) => !["me"].includes(k)).map((k) => k + "=" + P[k][0]).join("、")}。角色設定：${TRAIT}。教室後面有三張躺椅，後牆有個通往隔壁班的洞（偷看會有機率被怒視）。王冠筌不整理，教室可撿到雜物（偶爾有黃元銘發臭的便當，碰到會中毒）。規則：1) 不寫暴力、血腥、18+；不親密冒犯；不熟就做親密舉動要扣好感。2) 口頭禪不要濫用，平均每 3～5 句才一次，且只有本人會說。3) 好感度單次提升：普通成功最多 +2，大成功（骰 20）最多 +5，失敗或冒犯可以扣分。4) 玩家若把故事帶到天馬行空或離譜方向，先用一句話問玩家要不要拉回，別擅自強制拉回。5) 嚴格依照給你的目前時段、課表與出席資訊來寫；上課時要符合老師個性；下課可以聊天、買東西、撿東西、打球。6) 玩家的行動可能附帶骰子結果（d20，DC12）：有風險的行動必須尊重骰子，成功就有效，失敗就搞笑失敗；無風險的行動可以忽略骰子。7) 每次只推進一個小段落，不要替玩家做決定。8) 當這個時段的事情告一段落，advance 設 true 讓時間往下一時段前進。只輸出 JSON，不要任何其他文字，格式：{"bg":"room|hall|coop|music|dusk|gate|lab","lines":[["角色id或空字串","台詞或旁白","h|a|s|n"]],"choices":["選項1","選項2","選項3"],"aff":{"角色id":數字},"h":0,"e":0,"m":0,"item":"","advance":false}。lines 3 到 6 句，choices 剛好 3 個且後果不同，h/e 為飢餓與精力變化，m 為記過增加，item 為獲得的道具名稱（可為空）。`;
+const SYS = `你是《柒班真是太可愛了》的 GM。場景：武陵高中高三 307 班（柒班），導師沈玉梅，全班學生都是男生。基調：日常、溫暖、笑點密集的校園喜劇，描寫偏白描。全部劇情由你即興產生，沒有預設劇本，要依玩家行動自然推進。角色 id 對照：${Object.keys(P).filter((k) => !["me"].includes(k)).map((k) => k + "=" + P[k][0]).join("、")}。角色設定：${TRAIT}。教室後面有三張躺椅，後牆有個通往隔壁班的洞（偷看會有機率被怒視）。王冠筌不整理，教室可撿到雜物（偶爾有黃元銘發臭的便當，碰到會中毒）。規則：1) 不寫暴力、血腥、18+；不親密冒犯；不熟就做親密舉動要扣好感。2) 口頭禪不要濫用，平均每 3～5 句才一次，且只有本人會說。3) 好感度單次提升：普通成功最多 +2，大成功（骰 20）最多 +5，失敗或冒犯可以扣分。4) 玩家若把故事帶到天馬行空或離譜方向，先用一句話問玩家要不要拉回，別擅自強制拉回。5) 嚴格依照給你的目前時段、課表與出席資訊來寫；上課時要符合老師個性；下課可以聊天、買東西、撿東西、打球。6) 玩家的行動可能附帶骰子結果（d20，DC12）：有風險的行動必須尊重骰子，成功就有效，失敗就搞笑失敗；無風險的行動可以忽略骰子。7) 每次只推進一個小段落，不要替玩家做決定。8) 每個時段最多進行 3 回合，我會告訴你目前已進行幾回合；事情告一段落或回合數 ≥ 3 時，advance 一定要設 true，讓時間往下一時段前進，不要一直停留在同一節。地點 place 必須從這份清單選一個最符合目前劇情的：${PLACES.join("、")}（體育課在操場或體育館，音樂課在音樂教室，生物實驗課偶爾在生物實驗室，午餐在合作社或教室，打掃在教室或走廊，放學在校門或走廊）。成就：遇到有趣、荒謬或值得紀念的事（大約每 3 到 6 回合），回傳一個你亂掰的好笑成就 ach，名字要誇張有梗，例如「火鍋預備役」「Timing 逃脫大師」；沒有就給 null。只輸出 JSON，不要任何其他文字，格式：{"place":"地點","lines":[["角色id或空字串","台詞或旁白","h|a|s|n"]],"choices":["選項1","選項2","選項3"],"aff":{"角色id":數字},"h":0,"e":0,"m":0,"item":"","advance":false,"schedule":["今日課表陣列，順序與長度同我給你的今日課表，每項格式「時段｜課程或活動｜地點」"],"ach":{"name":"成就名","desc":"一句話描述"}或null}。lines 3 到 6 句，choices 剛好 3 個且後果不同，h/e 為飢餓與精力變化，m 為記過增加，item 為獲得的道具名稱（可為空）。`;
 
 const cl = (n) => Math.max(0, Math.min(100, n));
-const fresh = () => ({ on: false, day: 1, slot: 0, frames: [], fi: 0, choices: [], aff: {}, aff0: {}, h: 80, e: 80, m: 0, inv: [], roll: null, bg: "gate", mem: [], tid: 0, pendingEnd: false, settle: false, summary: "", loading: false, last: null, absent: false, inv0: 0 });
+const fresh = () => ({ on: false, day: 1, slot: 0, frames: [], fi: 0, choices: [], aff: {}, aff0: {}, h: 80, e: 80, m: 0, inv: [], roll: null, bg: "gate", mem: [], tid: 0, pendingEnd: false, settle: false, summary: "", loading: false, last: null, absent: false, inv0: 0, place: "校門", sched: null, ach: [], tin: 0 });
 
 function QibanGalGame() {
   const [name, setName] = useState("柒班新生");
@@ -121,7 +128,9 @@ function QibanGalGame() {
   const [inp, setInp] = useState("");
   const [prov, setProv] = useState("gemini"), [key, setKey] = useState(""), [model, setModel] = useState("gemini-2.5-flash"), [cfg, setCfg] = useState(false), [test, setTest] = useState("");
   const [bag, setBag] = useState(false), [sel, setSel] = useState(0), [panel, setPanel] = useState(false), [fs, setFs] = useState(false);
+  const [schedP, setSchedP] = useState(false), [achP, setAchP] = useState(false), [toast, setToast] = useState(null);
   const [txt, setTxt] = useState(""), done = useRef(false);
+  useEffect(() => { if (st.ach.length) { setToast(st.ach[st.ach.length - 1]); const t = setTimeout(() => setToast(null), 3800); return () => clearTimeout(t); } }, [st.ach.length]);
   P.me = [name || "你", "#3a2a2a", g === "f" ? "long" : "short", S, ""];
   const aff = (k) => st.aff[k] ?? 10;
   const stacks = [];
@@ -167,7 +176,7 @@ function QibanGalGame() {
     const d20 = 1 + Math.floor(Math.random() * 20), roll = opts.start ? null : { d20, dc: 12, ok: d20 === 20 || (d20 !== 1 && d20 >= 12), big: d20 === 20 };
     const absentHx = opts.absent ?? s0.absent, csHere = Math.random() < 0.08;
     setSt((s) => ({ ...s, loading: true, last: { act, opts }, absent: absentHx }));
-    const ctx = { 日期: `${dd.getMonth() + 1}/${dd.getDate()}（${WD[dd.getDay()]}）第${s0.day}天`, 目前時段: cu[0], 該節課程: cu[1] || "（下課或非上課時段）", 主角: `${name}（${g === "f" ? "女" : g === "x" ? "性別不指定" : "男"}）`, 飢餓: s0.h, 精力: s0.e, 記過: s0.m, 道具: s0.inv, 友好度: s0.aff, 出席: { 黃昱翔玉米: absentHx && s0.slot < 7 ? "上午缺席，不在教室" : "在教室", 陳紹宇: csHere ? "今天剛好有來，可以出場" : "沒來，只能被提起" }, 最近劇情: s0.mem.slice(-8) };
+    const ctx = { 日期: `${dd.getMonth() + 1}/${dd.getDate()}（${WD[dd.getDay()]}）第${s0.day}天`, 目前時段: cu[0], 該節課程: cu[1] || "（下課或非上課時段）", 本時段已進行回合數: s0.tin, 今日課表: sl0.map((x) => x[0] + (x[1] ? "｜" + x[1] : "")), 目前地點: s0.place, 主角: `${name}（${g === "f" ? "女" : g === "x" ? "性別不指定" : "男"}）`, 飢餓: s0.h, 精力: s0.e, 記過: s0.m, 道具: s0.inv, 友好度: s0.aff, 出席: { 黃昱翔玉米: absentHx && s0.slot < 7 ? "上午缺席，不在教室" : "在教室", 陳紹宇: csHere ? "今天剛好有來，可以出場" : "沒來，只能被提起" }, 最近劇情: s0.mem.slice(-8) };
     const usr = `${opts.start ? "這是這一天的開場，請自己寫一個符合時段與課表的開場場景。" : `玩家行動：「${act}」。骰子：d20=${roll.d20}，DC12，${roll.big ? "大成功" : roll.ok ? "成功" : "失敗"}。`}\n狀態：${JSON.stringify(ctx)}`;
     try {
       const j = parse(await callLLM(SYS, usr));
@@ -175,8 +184,8 @@ function QibanGalGame() {
       setSt((s) => {
         const A = { ...s.aff };
         Object.entries(j.aff || {}).forEach(([k, v]) => { if (!P[k]) return; const n = Number(v) || 0; A[k] = cl((A[k] ?? 10) + (n > 0 ? Math.min(n, roll?.big ? 5 : 2) : Math.max(n, -10))); });
-        const adv = !!j.advance, ns = adv ? s.slot + 1 : s.slot;
-        return { ...s, loading: false, aff: A, h: cl(s.h + (Number(j.h) || 0) - (adv ? 6 : 0)), e: cl(s.e + (Number(j.e) || 0) - (adv ? 5 : 0)), m: s.m + (Number(j.m) || 0), inv: j.item ? [...s.inv, String(j.item)] : s.inv, roll, bg: ["room", "hall", "coop", "music", "dusk", "gate", "lab"].includes(j.bg) ? j.bg : s.bg, frames: lines.length ? lines : [["", "…"]], fi: 0, choices: (j.choices || []).slice(0, 3).map(String), slot: ns, pendingEnd: ns >= slotsOf(s.day).length, mem: [...s.mem, ...lines.map(([w, t]) => (w ? P[w][0] + "：" : "") + t)].slice(-16), tid: s.tid + 1 };
+        const adv = !!j.advance || s.tin + 1 >= 4, ns = adv ? s.slot + 1 : s.slot, place = PLACES.includes(j.place) ? j.place : s.place, sn = slotsOf(s.day)[Math.min(ns, slotsOf(s.day).length - 1)][0];
+        return { ...s, loading: false, aff: A, h: cl(s.h + (Number(j.h) || 0) - (adv ? 6 : 0)), e: cl(s.e + (Number(j.e) || 0) - (adv ? 5 : 0)), m: s.m + (Number(j.m) || 0), inv: j.item ? [...s.inv, String(j.item)] : s.inv, roll, place, bg: bgFor(place, sn), tin: adv ? 0 : s.tin + 1, sched: Array.isArray(j.schedule) && j.schedule.length >= 3 ? j.schedule.map(String) : s.sched, ach: j.ach && j.ach.name && !s.ach.some((a) => a.name === j.ach.name) ? [...s.ach, { name: String(j.ach.name), desc: String(j.ach.desc || ""), day: s.day }] : s.ach, frames: lines.length ? lines : [["", "…"]], fi: 0, choices: (j.choices || []).slice(0, 3).map(String), slot: ns, pendingEnd: ns >= slotsOf(s.day).length, mem: [...s.mem, ...lines.map(([w, t]) => (w ? P[w][0] + "：" : "") + t)].slice(-16), tid: s.tid + 1 };
       });
     } catch (e) {
       setSt((s) => ({ ...s, loading: false, roll: null, frames: [["", "AI 暫時沒有回應：" + (e.message || "未知錯誤") + "。可以按重試，或到 ⚙ 檢查設定。"]], fi: 0, choices: ["重試"], tid: s.tid + 1 }));
@@ -197,7 +206,7 @@ function QibanGalGame() {
   const send = () => { const a = inp.trim(); if (a && !st.loading) { setInp(""); turn(a); } };
   const nextDay = () => {
     const absent = Math.random() < 0.7;
-    const snap = { ...st, day: st.day + 1, slot: 0, aff0: { ...st.aff }, inv0: st.inv.length, h: Math.max(st.h, 60), e: Math.max(st.e, 70), frames: [], fi: 0, choices: [], settle: false, pendingEnd: false, roll: null, bg: "gate", absent, loading: false };
+    const snap = { ...st, day: st.day + 1, slot: 0, aff0: { ...st.aff }, inv0: st.inv.length, h: Math.max(st.h, 60), e: Math.max(st.e, 70), frames: [], fi: 0, choices: [], settle: false, pendingEnd: false, roll: null, bg: "gate", place: "校門", sched: null, tin: 0, absent, loading: false };
     setSt(snap);
     turn("", { start: true, absent, snap });
   };
@@ -228,8 +237,8 @@ function QibanGalGame() {
       )}
       {st.on && (<>
         <div style={{ position: "absolute", top: 8, left: 8, right: 8, display: "flex", justifyContent: "space-between", flexWrap: "wrap", gap: 6, fontSize: 12, zIndex: 3 }} onClick={(e) => e.stopPropagation()}>
-          <span style={pill}>{dt.getMonth() + 1}/{dt.getDate()}（{WD[dt.getDay()]}）{cur[0]}{cur[1] ? "・" + cur[1] : ""}</span>
-          <span style={{ display: "flex", gap: 4 }}><button className="btn" style={sm} onClick={() => setBag(true)}>🎒</button><button className="btn" style={sm} onClick={() => setPanel(true)}>💗</button><button className="btn" style={sm} onClick={() => setCfg(true)}>⚙</button><button className="btn" style={sm} onClick={toggleFs}>{fs ? "🗗" : "⛶"}</button></span>
+          <span style={pill}>{dt.getMonth() + 1}/{dt.getDate()}（{WD[dt.getDay()]}）{cur[0]}{cur[1] ? "・" + cur[1] : ""}｜📍{st.place}</span>
+          <span style={{ display: "flex", gap: 4 }}><button className="btn" style={sm} onClick={() => setBag(true)}>🎒</button><button className="btn" style={sm} onClick={() => setPanel(true)}>💗</button><button className="btn" style={sm} onClick={() => setSchedP(true)}>📅</button><button className="btn" style={sm} onClick={() => setAchP(true)}>🏆</button><button className="btn" style={sm} onClick={() => setCfg(true)}>⚙</button><button className="btn" style={sm} onClick={toggleFs}>{fs ? "🗗" : "⛶"}</button></span>
           <span style={pill}>飢餓 {st.h}｜精力 {st.e}｜小過 {st.m}</span>
         </div>
         <div style={{ position: "absolute", top: 70, bottom: 215, left: 0, right: 0, display: "flex", justifyContent: "center", alignItems: "flex-end" }}>
@@ -245,6 +254,7 @@ function QibanGalGame() {
             <div style={{ display: "flex", gap: 6 }}><input value={inp} onChange={(e) => setInp(e.target.value)} onKeyDown={(e) => { if (e.key === "Enter" && !e.nativeEvent.isComposing) send(); }} placeholder="自己決定要做什麼…" style={{ flex: 1, padding: 9, borderRadius: 12, border: "2px solid #ec5f92", fontSize: 14, background: "#fff", color: "#3a2430" }} /><button className="btn" onClick={send}>送出</button></div></div>}
         </div>
       </>)}
+      {toast && <div className="pop" style={{ position: "absolute", top: 76, left: "50%", transform: "translateX(-50%)", zIndex: 11, background: "#fff", border: "3px solid #ffb703", borderRadius: 14, padding: "8px 16px", textAlign: "center", boxShadow: "0 4px 14px #0003" }}><div style={{ fontSize: 12, color: "#d08700" }}>🏆 解鎖成就</div><div style={{ fontWeight: 700, color: "#a3225c" }}>{toast.name}</div></div>}
       {st.settle && (
         <div style={{ ...overlay, zIndex: 10, padding: 18, background: "linear-gradient(#ffe4efee,#ffc2dcee)" }} onClick={(e) => e.stopPropagation()}>
           <h2 style={{ margin: "10px 0 2px", color: "#a3225c", textAlign: "center" }}>🌸 第 {st.day} 天結算</h2>
@@ -253,6 +263,7 @@ function QibanGalGame() {
           <div style={{ background: "#fff", border: "3px solid #ec5f92", borderRadius: 14, padding: 12, fontSize: 14 }}>
             <div>🍽️ 飢餓 {st.h}　⚡ 精力 {st.e}　📝 小過 {st.m}</div>
             <div style={{ margin: "6px 0" }}>🎒 今天新增道具：{Math.max(0, st.inv.length - st.inv0)} 個</div>
+            <div style={{ margin: "6px 0" }}>🏆 今天的成就：{st.ach.filter((a) => a.day === st.day).map((a) => a.name).join("、") || "無"}</div>
             <div style={{ fontWeight: 700, color: "#a3225c", margin: "8px 0 4px" }}>好感度變化</div>
             {Object.keys(st.aff).filter((k) => (st.aff[k] ?? 10) !== (st.aff0[k] ?? 10)).map((k) => { const d = st.aff[k] - (st.aff0[k] ?? 10); return <div key={k} style={{ display: "flex", justifyContent: "space-between" }}><span>{P[k]?.[0]}</span><span style={{ color: d > 0 ? "#2a9d4f" : "#d62828" }}>{d > 0 ? "▲ +" : "▼ "}{d}（{st.aff[k]}/100）</span></div>; })}
             {Object.keys(st.aff).filter((k) => (st.aff[k] ?? 10) !== (st.aff0[k] ?? 10)).length === 0 && <div style={{ opacity: 0.6 }}>今天沒有變化</div>}
@@ -290,6 +301,22 @@ function QibanGalGame() {
             <input value={model} onChange={(e) => setModel(e.target.value)} placeholder="模型名稱" style={{ padding: 10, borderRadius: 12, border: "2px solid #ec5f92", fontSize: 14 }} />
             <div style={{ fontSize: 12, opacity: 0.75, lineHeight: 1.6 }}>Key 只存在這個畫面的記憶體裡，關掉就消失，只會直接送到 Google。</div></div>}
           <div style={{ ...fsx, marginTop: 12, flexWrap: "wrap" }}><button className="btn" onClick={testConn}>🔌 測試連線</button><span style={{ fontSize: 13 }}>{test}</span></div>
+        </div>
+      )}
+      {schedP && (
+        <div style={overlay} onClick={(e) => e.stopPropagation()}>
+          <X onClick={() => setSchedP(false)} />
+          <h2 style={{ margin: "0 0 4px", color: "#a3225c" }}>📅 今日課表</h2>
+          <div style={{ fontSize: 12, opacity: 0.7, marginBottom: 8 }}>{dt.getMonth() + 1}/{dt.getDate()}（{WD[dt.getDay()]}）第 {st.day} 天</div>
+          {(st.sched && st.sched.length ? st.sched : slots.map((x) => x[0] + (x[1] ? "｜" + x[1] : ""))).map((row, i) => <div key={i} style={{ background: i === st.slot ? "#ffd3e4" : "#fff", border: i === st.slot ? "3px solid #a3225c" : "2px solid #ec5f9288", borderRadius: 12, padding: "8px 12px", margin: "6px 0", fontSize: 14, opacity: i < st.slot ? 0.55 : 1 }}>{i < st.slot ? "✓ " : i === st.slot ? "▶ " : ""}{row}</div>)}
+        </div>
+      )}
+      {achP && (
+        <div style={overlay} onClick={(e) => e.stopPropagation()}>
+          <X onClick={() => setAchP(false)} />
+          <h2 style={{ margin: "0 0 8px", color: "#a3225c" }}>🏆 成就　<span style={{ fontSize: 13, fontWeight: 400 }}>{st.ach.length} 個</span></h2>
+          {st.ach.length === 0 && <div style={{ opacity: 0.6, fontSize: 14 }}>還沒有成就。做點有趣（或荒謬）的事吧，名字會由 AI 亂掰。</div>}
+          {st.ach.map((a, i) => <div key={i} style={{ background: "#fff", border: "3px solid #ffb703", borderRadius: 12, padding: "8px 12px", margin: "6px 0" }}><div style={{ fontWeight: 700, color: "#a3225c" }}>🏆 {a.name}</div><div style={{ fontSize: 13, margin: "2px 0" }}>{a.desc}</div><div style={{ fontSize: 11, opacity: 0.6 }}>第 {a.day} 天</div></div>)}
         </div>
       )}
       {panel && (
